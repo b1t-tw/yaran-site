@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-dark: #113831;
+  --color-primary-light: #ddd7a5;
+}
+
+@layer base {
+  body {
+    font-family: "Cormorant Garamond", "LXGW WenKai TC", sans-serif;
+    @apply bg-primary-dark;
+  }
+  h1 {
+    @apply text-3xl font-bold;
+  }
+  h2 {
+    @apply text-2xl font-bold;
+  }
+  h3 {
+    @apply text-xl font-bold;
+  }
+  h4 {
+    @apply text-lg font-bold;
+  }
+  h5 {
+    @apply text-base font-bold;
+  }
+  p {
+    &:not(:last-child) {
+      @apply mb-4;
+    }
+  }
+}
+
+@layer utilities {
+  .container {
+    @apply mx-auto lg:max-w-5xl px-4;
+  }
+}
