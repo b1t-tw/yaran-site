@@ -68,7 +68,7 @@ onMounted(() => {
       </div>
       <div class="drop-shadow-lg min-h-64">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d903.6452257566805!2d121.5836832695777!3d25.04829299861296!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjXCsDAyJzUzLjkiTiAxMjHCsDM1JzAzLjYiRQ!5e0!3m2!1szh-TW!2stw!4v1752252839637!5m2!1szh-TW!2stw"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d903.6451365723887!2d121.58371056957773!3d25.048305098612953!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442ab005f0bb4e7%3A0xc74c815ec0860d48!2zWWFyYW4g6YeO6Jit5pSd5b2x5qOa!5e0!3m2!1szh-TW!2stw!4v1752257053005!5m2!1szh-TW!2stw"
           width="100%" height="100%" style="border:0; border-radius: 1rem;" allowfullscreen="" loading="lazy"
           referrerpolicy="no-referrer-when-downgrade" title="Google Map">
         </iframe>
