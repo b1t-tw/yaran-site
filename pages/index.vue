@@ -42,13 +42,10 @@ onMounted(() => {
       <img src="/logo_h_gold.png" alt="Yaran 野蘭攝影棚" class="w-full max-md:hidden" />
       <img src="/logo_v_gold.png" alt="Yaran 野蘭攝影棚" class="w-full md:hidden" />
     </div>
-    
+
     <!-- Scroll down icon -->
-    <div 
-      ref="scrollIconRef"
-      class="absolute bottom-8 left-1/2 transform -translate-x-1/2 scroll-down-icon"
-      :class="{ 'show': showScrollIcon }"
-    >
+    <div ref="scrollIconRef" class="absolute bottom-8 left-1/2 transform -translate-x-1/2 scroll-down-icon"
+      :class="{ 'show': showScrollIcon }">
       <div class="flex flex-col items-center">
         <Icon class="text-2xl mb-1">keyboard_arrow_down</Icon>
         <span class="text-sm opacity-70">向下滾動</span>
@@ -60,10 +57,12 @@ onMounted(() => {
       <div class="flex flex-col justify-center">
         <h2 class="mb-4">交通方式</h2>
         <div class="grid grid-cols-[1.5rem_1fr] items-center gap-2">
-          <Icon>directions_railway_2</Icon><span>捷運後山埤站4號出口，步行約6分鐘</span>
+          <Icon>directions_railway_2</Icon><span>捷運後山埤s站4號出口，步行約6分鐘</span>
           <Icon>directions_bus</Icon><span>聯合醫院忠孝院區站，步行約1分鐘</span>
           <Icon>directions_car</Icon>
-          <span><a target="_blank" href="https://maps.app.goo.gl/gH8bDAB13MsLYKyk7">168 Parking (昆陽一場)</a>，步行約1分鐘</span>
+          <span><a target="_blank" href="https://maps.app.goo.gl/LwovktrCQaDD6GkDA">俥亭天主堂地下停車場</a>，步行約3分鐘</span>
+          <Icon>directions_car</Icon>
+          <span><a target="_blank" href="https://maps.app.goo.gl/gH8bDAB13MsLYKyk7">168 Parking (昆陽一場)</a>，步行約3分鐘</span>
         </div>
       </div>
       <div class="drop-shadow-lg min-h-64">
@@ -106,12 +105,19 @@ onMounted(() => {
 }
 
 @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
+
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
     transform: translateY(0);
   }
+
   40% {
     transform: translateY(-10px);
   }
+
   60% {
     transform: translateY(-5px);
   }
