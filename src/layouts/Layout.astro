@@ -1,0 +1,30 @@
+---
+import '../styles/font.css';
+import '../styles/main.css';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+const fullTitle = `${title} - YARAN 野蘭攝影棚`;
+const description = 'YARAN 野蘭攝影棚';
+---
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/png" href="/logo_icon.png" />
+    <title>{fullTitle}</title>
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body>
+    <slot />
+    <Footer />
+  </body>
+</html>

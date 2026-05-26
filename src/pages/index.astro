@@ -1,0 +1,142 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import logoH from '../assets/logo_h_gold.png';
+import logoV from '../assets/logo_v_gold.png';
+import hero1 from '../assets/images/20260515_野蘭空間照_CXL_2164.jpg';
+import hero2 from '../assets/images/20260515_野蘭空間照_CXL_2170.jpg';
+import hero3 from '../assets/images/20260515_野蘭空間照_CXL_2222.jpg';
+import hero4 from '../assets/images/20260515_野蘭空間照_CXL_2301.jpg';
+import hero5 from '../assets/images/20260515_野蘭空間照_CXL_2327.jpg';
+
+const heroImages = [hero1, hero2, hero3, hero4, hero5];
+---
+<Layout title="首頁">
+  <div id="hero" class="h-svh w-full flex items-center justify-center relative overflow-hidden">
+    <div class="absolute inset-0">
+      <div class="swiper hero-swiper">
+        <div class="swiper-wrapper">
+          {heroImages.map((img) => (
+            <div class="swiper-slide">
+              <Image src={img} alt="Yaran 野蘭攝影棚空間照" format="webp" quality={80} class="w-full h-full object-cover object-top" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+    <div class="absolute inset-0 bg-black/60 z-1"></div>
+
+    <div id="logo" class="w-1/2 fade-up relative z-10 drop-shadow-lg">
+      <Image src={logoH} alt="Yaran 野蘭攝影棚" format="webp" quality={85} class="w-full max-md:hidden" />
+      <Image src={logoV} alt="Yaran 野蘭攝影棚" format="webp" quality={85} class="w-full md:hidden" />
+    </div>
+
+    <div id="scroll-icon" class="absolute bottom-8 left-1/2 transform -translate-x-1/2 scroll-down-icon z-10">
+      <div class="flex flex-col items-center">
+        <Icon class="text-2xl mb-1">keyboard_arrow_down</Icon>
+        <span class="text-sm opacity-70">向下滾動</span>
+      </div>
+    </div>
+    <div class="absolute left-0 right-0 bottom-0 h-20 bg-gradient-to-t from-black/80 to-transparent z-2"></div>
+  </div>
+  
+  <div class="w-full bg-primary-light text-primary-dark relative">
+    <div class="container grid grid-cols-1 md:grid-cols-2 py-20 gap-8">
+      <div class="flex flex-col justify-center">
+        <h2 class="mb-4">交通方式</h2>
+        <div class="grid grid-cols-[1.5rem_1fr] items-center gap-2">
+          <Icon>directions_railway_2</Icon><span>捷運後山埤站4號出口，步行約6分鐘</span>
+          <Icon>directions_bus</Icon><span>聯合醫院忠孝院區站，步行約1分鐘</span>
+          <Icon>directions_car</Icon>
+          <span><a target="_blank" href="https://maps.app.goo.gl/gH8bDAB13MsLYKyk7">168 Parking (昆陽一場)</a>，步行約3分鐘</span>
+          <Icon>directions_car</Icon>
+          <span><a target="_blank" href="https://maps.app.goo.gl/TN6gbewNJ69aQMSA6">俥亭天主堂地下停車場</a>，步行約3分鐘</span>
+        </div>
+      </div>
+      <div class="drop-shadow-lg min-h-64">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d903.6451365723887!2d121.58371056957773!3d25.048305098612953!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442ab005f0bb4e7%3A0xc74c815ec0860d48!2zWWFyYW4g6YeO6Jit5pSd5b2x5qOa!5e0!3m2!1szh-TW!2stw!4v1752257053005!5m2!1szh-TW!2stw"
+          width="100%" height="100%" style="border:0; border-radius: 1rem;" allowfullscreen loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade" title="Google Map">
+        </iframe>
+      </div>
+    </div>
+    <div class="container pb-20">
+      <h2 class="mb-4">預約方式</h2>
+      <p>攝影棚籌備中，尚未開放預約，敬請期待</p>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .hero-swiper,
+  .hero-swiper .swiper-wrapper,
+  .hero-swiper .swiper-slide {
+    width: 100%;
+    height: 100%;
+  }
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+  }
+  .fade-up.animate {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .scroll-down-icon {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+  .scroll-down-icon.show {
+    opacity: 1;
+    transform: translateY(0);
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+  }
+</style>
+
+<script>
+  import Swiper from 'swiper';
+  import { Autoplay, EffectFade } from 'swiper/modules';
+  import 'swiper/css';
+  import 'swiper/css/effect-fade';
+
+  new Swiper('.hero-swiper', {
+    modules: [Autoplay, EffectFade],
+    effect: 'fade',
+    fadeEffect: { crossFade: true },
+    loop: true,
+    speed: 4000,
+    allowTouchMove: false,
+    autoplay: {
+      delay: 100,
+      disableOnInteraction: false,
+    },
+  });
+
+  const logo = document.getElementById('logo');
+  const scrollIcon = document.getElementById('scroll-icon');
+
+  if (logo && scrollIcon) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            logo.classList.add('animate');
+            setTimeout(() => scrollIcon.classList.add('show'), 1500);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    );
+    observer.observe(logo);
+  }
+</script>
