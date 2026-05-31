@@ -23,6 +23,9 @@
       @apply mb-2;
     }
   }
+  li {
+    @apply mb-1;
+  }
   a[href] {
     @apply transition-opacity duration-200 hover:opacity-75;
   }
@@ -44,4 +47,11 @@
   .card {
     @apply rounded-lg overflow-hidden shadow-md p-4;
   }
+  .btn {
+    @apply inline-flex items-center gap-1 px-4 py-2 rounded-lg font-bold transition-colors no-underline;
+  }
+  .btn-primary {
+    @apply bg-primary-light text-primary-dark hover:bg-primary-light/90;
+  }
+
 }
