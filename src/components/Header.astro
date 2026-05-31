@@ -1,0 +1,46 @@
+---
+import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
+import logoW from "../assets/logo_white.png";
+
+const links = [
+  { name: "HOME", href: "/" },
+  { name: "租棚須知", href: "/rules" },
+  { name: "棚景介紹", href: "/scenes" },
+];
+
+const isActive = (href: string) => {
+  const currentPath = Astro.url.pathname;
+  console.log("currentPath:", currentPath, "href:", href);
+  return currentPath === href || (href !== "/" && currentPath.startsWith(href));
+};
+
+const { hideLogo } = Astro.props;
+---
+
+<header>
+  {
+    !hideLogo && (
+      <div class="flex items-center justify-center py-6">
+        <a href="/">
+          <Image src={logoW} alt="Yaran 野蘭攝影棚" format="webp" quality={85} class="h-12 w-auto" />
+        </a>
+      </div>
+    )
+  }
+  <nav class="border-y-1 border-[#fff3] py-3 font-semibold">
+    <ul class="flex space-x-6 justify-center items-center">
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class={`pb-1 border-b-2 border-transparent hover:border-amber-100 hover:!opacity-100 transition ${isActive(link.href) ? "!border-amber-50" : ""}`}>
+              {link.name}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>

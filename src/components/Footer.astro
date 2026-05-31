@@ -1,17 +1,31 @@
 ---
-import Icon from './Icon.astro';
+import { Icon } from "astro-icon/components";
 ---
-<footer class="bg-primary-dark text-primary-light py-20">
-  <div class="container">
-    <div class="grid grid-cols-1 md:grid-cols-2">
+
+<footer class="bg-primary-dark text-primary-light">
+  <div class="container pt-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
       <div>
         <h3 class="mb-4">YARAN 野蘭攝影棚</h3>
         <div class="grid grid-cols-[1.5rem_1fr] items-center gap-2">
-          <Icon>distance</Icon><span>臺北市南港區忠孝東路六段81巷4號2樓</span>
-          <Icon>mail</Icon><span><a href="mailto:info@yaran.studio">info@yaran.studio</a></span>
+          <Icon name="ic:baseline-location-on" /><span><a href="https://maps.app.goo.gl/uNDP58Zto9S3bJAFA" target="_blank" class="no-underline">臺北市南港區忠孝東路六段81巷4號2樓</a></span>
+          <Icon name="ic:mail" /><span><a href="mailto:info@yaran.studio">info@yaran.studio</a></span>
         </div>
       </div>
-      <div></div>
+      <div class="md:ms-auto md:text-end">
+        <h3 class="mb-4">關於</h3>
+        <div class="flex flex-col gap-2">
+          <a href="/rules">租棚須知</a>
+          <a href="/scenes">棚景介紹</a>
+        </div>
+      </div>
     </div>
+    <div class="flex items-center max-md:justify-center gap-1 mt-8 mb-4">
+      <a href="https://www.instagram.com/yaran.studio_tw" target="_blank">
+        <Icon name="ri:instagram-line" size={30} /></a
+      >
+      <a href="https://www.facebook.com/yaran.studio.tw" target="_blank"> <Icon name="ri:facebook-fill" size={32} /></a>
+    </div>
+    <div class="text-center text-sm opacity-70 mt-6 pb-1">&copy; 2026 YARAN Studio. All rights reserved.</div>
   </div>
 </footer>

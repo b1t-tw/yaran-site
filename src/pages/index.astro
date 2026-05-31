@@ -1,7 +1,8 @@
 ---
 import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
-import Icon from '../components/Icon.astro';
+import Header from '../components/Header.astro';
+import { Icon } from 'astro-icon/components'
 import logoH from '../assets/logo_h_gold.png';
 import logoV from '../assets/logo_v_gold.png';
 import hero1 from '../assets/images/20260515_野蘭空間照_CXL_2164.jpg';
@@ -19,7 +20,7 @@ const heroImages = [hero1, hero2, hero3, hero4, hero5];
         <div class="swiper-wrapper">
           {heroImages.map((img) => (
             <div class="swiper-slide">
-              <Image src={img} alt="Yaran 野蘭攝影棚空間照" format="webp" quality={80} class="w-full h-full object-cover object-top" />
+              <Image src={img} alt="Yaran 野蘭攝影棚空間照" format="webp" quality={80} width={2560} class="w-full h-full object-cover object-top" />
             </div>
           ))}
         </div>
@@ -34,23 +35,23 @@ const heroImages = [hero1, hero2, hero3, hero4, hero5];
 
     <div id="scroll-icon" class="absolute bottom-8 left-1/2 transform -translate-x-1/2 scroll-down-icon z-10">
       <div class="flex flex-col items-center">
-        <Icon class="text-2xl mb-1">keyboard_arrow_down</Icon>
+        <Icon name="ic:baseline-keyboard-arrow-down" class="text-2xl mb-1"/>
         <span class="text-sm opacity-70">向下滾動</span>
       </div>
     </div>
     <div class="absolute left-0 right-0 bottom-0 h-20 bg-gradient-to-t from-black/80 to-transparent z-2"></div>
   </div>
-  
-  <div class="w-full bg-primary-light text-primary-dark relative">
+  <Header hideLogo={true} />
+  <div class="w-full relative">
     <div class="container grid grid-cols-1 md:grid-cols-2 py-20 gap-8">
       <div class="flex flex-col justify-center">
         <h2 class="mb-4">交通方式</h2>
         <div class="grid grid-cols-[1.5rem_1fr] items-center gap-2">
-          <Icon>directions_railway_2</Icon><span>捷運後山埤站4號出口，步行約6分鐘</span>
-          <Icon>directions_bus</Icon><span>聯合醫院忠孝院區站，步行約1分鐘</span>
-          <Icon>directions_car</Icon>
+          <Icon name="ic:baseline-directions-railway-filled"/><span>捷運後山埤站4號出口，步行約6分鐘</span>
+          <Icon name="ic:baseline-directions-bus"/><span>聯合醫院忠孝院區站，步行約1分鐘</span>
+          <Icon name="ic:baseline-directions-car"/>
           <span><a target="_blank" href="https://maps.app.goo.gl/gH8bDAB13MsLYKyk7">168 Parking (昆陽一場)</a>，步行約3分鐘</span>
-          <Icon>directions_car</Icon>
+          <Icon name="ic:baseline-directions-car"/>
           <span><a target="_blank" href="https://maps.app.goo.gl/TN6gbewNJ69aQMSA6">俥亭天主堂地下停車場</a>，步行約3分鐘</span>
         </div>
       </div>
@@ -63,8 +64,16 @@ const heroImages = [hero1, hero2, hero3, hero4, hero5];
       </div>
     </div>
     <div class="container pb-20">
-      <h2 class="mb-4">預約方式</h2>
-      <p>攝影棚籌備中，尚未開放預約，敬請期待</p>
+      <h2 class="mb-4">馬上預約</h2>
+      <ul class="list-disc pl-6 mb-2">
+        <li>攝影棚為全預約制，若無預約請勿前往</li>
+        <li>開放時間為週一 ~ 週日 9am -10pm，休息日於時間表上公告，非營業時間無法回覆訊息請見諒</li>
+        <li>全區 30 坪無隔間，每次僅接待一組客人，不接受中途換人</li>
+        <li>每次租棚以 2 小時起跳</li>
+      </ul>
+      <p>⊱ 試營運優惠價：<strong class="text-4xl"><del>2200</del> 1800／小時</strong> ⊰</p>
+      <p class="text-sm opacity-70">以上費用僅適用於「一般人像／Cosplay、Lolita 攝影」，「商業攝影／婚攝／動態攝影／活動合作」的價格請私訊詢問</p>
+      <p class="text-sm opacity-70">商業攝影的定義為用於宣傳、廣告、行銷目的之拍攝。</p>
     </div>
   </div>
 </Layout>

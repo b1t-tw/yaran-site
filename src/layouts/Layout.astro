@@ -1,7 +1,7 @@
 ---
-import '../styles/font.css';
 import '../styles/main.css';
 import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
 
 interface Props {
   title: string;
@@ -22,8 +22,22 @@ const description = 'YARAN 野蘭攝影棚';
     <meta property="og:description" content={description} />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chiron+Sung+HK:ital,wght@0,200..900;1,200..900&family=Cinzel:wght@400..900&0&family=Cormorant+Infant:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
   </head>
   <body>
+    {
+      title !== '首頁' && (
+        <Header/>
+        <div class="text-center border-b border-[#fff3]">
+          <h1 class="py-8">{title}</h1>
+          <div class="text-primary-light">
+            <slot name="subtitle" />
+          </div>
+        </div>
+      )
+    }
     <slot />
     <Footer />
   </body>
