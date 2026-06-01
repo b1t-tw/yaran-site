@@ -1,20 +1,31 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ImageSwiper from "../components/ImageSwiper.astro";
+import { Image } from "astro:assets";
+
+// 用 import 進來的 ImageMetadata 物件，Astro 才會優化並轉成 webp
+const otherImages = Object.entries(
+  import.meta.glob<{ default: ImageMetadata }>(
+    "/src/assets/images/other/*.{jpg,jpeg,png,JPG,JPEG,PNG}",
+    { eager: true },
+  ),
+)
+  .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
+  .map(([, mod]) => mod.default);
 ---
 
 <Layout title="棚景介紹">
   <div class="mb-8 px-4" slot="subtitle">
     <div class="md:hidden">
-    縱使生於幽谷峭壁<br />
-    亦要綻放一身大正摩登的傲骨<br />
-    來到野蘭<br />
-    微醺在和洋交織的夢境裡<br />
-    兀自浪漫地呼吸
+      縱使生於幽谷峭壁<br />
+      亦要綻放一身大正摩登的傲骨<br />
+      來到野蘭<br />
+      微醺在和洋交織的夢境裡<br />
+      兀自浪漫地呼吸
     </div>
     <div class="hidden md:block">
-    縱使生於幽谷峭壁，亦要綻放一身大正摩登的傲骨；<br />
-    來到野蘭，微醺在和洋交織的夢境裡，兀自浪漫地呼吸。
+      縱使生於幽谷峭壁，亦要綻放一身大正摩登的傲骨；<br />
+      來到野蘭，微醺在和洋交織的夢境裡，兀自浪漫地呼吸。
     </div>
   </div>
   <main class="py-8">
@@ -49,7 +60,7 @@ import ImageSwiper from "../components/ImageSwiper.astro";
         <h2 class="mb-6">𖠁 大正喫茶店 𖠁</h2>
         <div class="grid md:grid-cols-2 mb-6 gap-6">
           <ImageSwiper dir="tea-shop" />
-          <div>
+          <div class="flex flex-col justify-center">
             <p>
               久違的休息日，推開沉穩木門，轉身在玄關掛起大衣與禮帽。空氣中微帶苦澀的咖啡香沁入鼻腔，唱盤旋轉出爵士樂的慵懶節奏。
             </p>
@@ -71,8 +82,10 @@ import ImageSwiper from "../components/ImageSwiper.astro";
       <div class="mb-6">
         <h2 class="mb-6">𖠁 私人洋裁室 𖠁</h2>
         <div class="grid md:grid-cols-2 mb-6 gap-6">
-          <ImageSwiper dir="sewing-room" />
-          <div>
+          <div class="md:order-1 min-w-1 w-full">
+            <ImageSwiper dir="sewing-room" />
+          </div>
+          <div class="flex flex-col justify-center">
             午後的斜陽滲透蕾絲，在鐵黑色的縫紉機身上輕盈地灑下。布料推進時的輕微摩擦、老踏板規律的軋軋聲，在針線交錯間呼吸，細細編織著和洋交融的溫柔。
           </div>
         </div>
@@ -87,7 +100,7 @@ import ImageSwiper from "../components/ImageSwiper.astro";
         <h2 class="mb-6">𖠁 榻榻米生活區 𖠁</h2>
         <div class="grid md:grid-cols-2 mb-6 gap-6">
           <ImageSwiper dir="tatami" />
-          <div>
+          <div class="flex flex-col justify-center">
             一日結束前，沉浸於無人打擾的世界，翻翻未讀完的書、撥弄幾下三味線、打牌下棋與自己對弈，累了就隨性往榻榻米上一躺，閉上眼，深吸一口沉靜的藺草香，度過專注而又閒散的時光。
           </div>
         </div>
@@ -96,6 +109,27 @@ import ImageSwiper from "../components/ImageSwiper.astro";
         <p>三味線、扇子、底片機、面具、圍棋、古本、鏡子、百人一首歌牌</p>
         <h3 class="mt-4 mb-3">✧ 注意事項 ✧</h3>
         <p>禁止「穿鞋」、「赤腳」上榻榻米</p>
+      </div>
+      <hr />
+
+      <div class="mb-6">
+        <h2 class="mb-8">𖠁 其他場景照片 𖠁</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 mb-6 gap-6">
+          {
+            otherImages.map((img) => (
+              <Image
+                src={img}
+                alt="Yaran 野蘭攝影棚其他場景照"
+                format="webp"
+                quality={80}
+                width={800}
+                height={800}
+                loading="lazy"
+                class="w-full aspect-square object-cover drop-shadow-lg rounded-lg"
+              />
+            ))
+          }
+        </div>
       </div>
     </div>
   </main>
