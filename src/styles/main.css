@@ -29,7 +29,7 @@
   a[href] {
     @apply transition-opacity duration-200 hover:opacity-75;
   }
-  a[href^="http"] {
+  main a[href] {
     @apply underline hover:opacity-75;
   }
   strong {

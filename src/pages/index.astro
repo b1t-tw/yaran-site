@@ -52,7 +52,8 @@ const heroImages = [hero1, hero2, hero3, hero4, hero5];
     <div class="absolute left-0 right-0 bottom-0 h-20 bg-gradient-to-t from-black/80 to-transparent z-2"></div>
   </div>
   <Header hideLogo={true} />
-  <div class="w-full relative">
+  
+  <main class="w-full relative">
     <div class="container grid grid-cols-1 md:grid-cols-2 py-20 gap-8">
       <div class="flex flex-col justify-center">
         <h2 class="mb-4">交通方式</h2>
@@ -99,7 +100,7 @@ const heroImages = [hero1, hero2, hero3, hero4, hero5];
       <p class="text-sm opacity-70">商業攝影的定義為用於宣傳、廣告、行銷目的之拍攝。</p>
       <h3 class="mb-4 mt-8">預約方式</h3>
       <ul class="mb-2">
-        <li>Step1：確認預約時段，並仔細閱讀攝影棚使用規範後，網站填表預約</li>
+        <li>Step1：確認預約時段，並仔細閱讀攝影棚使用規範後，<a href="https://frametime.app/v/yaran-studio" target="_blank">網站填表預約</a></li>
         <li>Step2：一日內支付訂金<a href="/prepaid" target="_blank">（線上金流）</a></li>
         <li>Step3：私訊 FB／IG 提供『預約人姓名』、『預約時間』、『電話』</li>
         <li>Step4：確認預約後，小幫手會將官網日曆更新</li>
@@ -122,7 +123,7 @@ const heroImages = [hero1, hero2, hero3, hero4, hero5];
         </li>
         <li>當日遲到、早退、缺席不予退費。</li>
         <li>若遇不可抗力因素（如颱風、地震）且政府公告放假，可改期或全額退訂金。</li>
-        <li>更多注意事項請見<a href="/rules" class="underline text-primary-light">租棚須知</a>。</li>
+        <li>更多注意事項請見<a href="/rules" class="text-primary-light">租棚須知</a>。</li>
       </ul>
       <div class="mt-8">
         <p>
@@ -138,7 +139,7 @@ const heroImages = [hero1, hero2, hero3, hero4, hero5];
       </div>
 
     </div>
-  </div>
+  </main>
 </Layout>
 
 <style>
