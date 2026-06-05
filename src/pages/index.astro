@@ -5,6 +5,7 @@ import Header from "../components/Header.astro";
 import { Icon } from "astro-icon/components";
 import logoH from "../assets/logo_h_gold.png";
 import logoV from "../assets/logo_v_gold.png";
+import yaran_map from "../assets/yaran_map.png";
 import hero1 from "../assets/images/20260515_野蘭空間照_CXL_2164.jpg";
 import hero2 from "../assets/images/20260515_野蘭空間照_CXL_2170.jpg";
 import hero3 from "../assets/images/20260515_野蘭空間照_CXL_2222.jpg";
@@ -52,13 +53,14 @@ const heroImages = [hero1, hero2, hero3, hero4, hero5];
     <div class="absolute left-0 right-0 bottom-0 h-20 bg-gradient-to-t from-black/80 to-transparent z-2"></div>
   </div>
   <Header hideLogo={true} />
-  
+
   <main class="w-full relative">
     <div class="container grid grid-cols-1 md:grid-cols-2 py-20 gap-8">
       <div class="flex flex-col justify-center">
         <h2 class="mb-4">交通方式</h2>
         <div class="grid grid-cols-[1.5rem_1fr] items-center gap-2">
-          <Icon name="ic:baseline-directions-railway-filled" /><span>捷運後山埤站4號出口，步行約6分鐘</span>
+          <Icon name="ic:baseline-train" /><span>松山火車站，步行約12分鐘</span>
+          <Icon name="ic:baseline-train" /><span>捷運後山埤站4號出口，步行約6分鐘</span>
           <Icon name="ic:baseline-directions-bus" /><span>聯合醫院忠孝院區站，步行約1分鐘</span>
           <Icon name="ic:baseline-directions-car" />
           <span
@@ -72,17 +74,10 @@ const heroImages = [hero1, hero2, hero3, hero4, hero5];
           >
         </div>
       </div>
-      <div class="drop-shadow-lg min-h-64">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d903.6451365723887!2d121.58371056957773!3d25.048305098612953!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442ab005f0bb4e7%3A0xc74c815ec0860d48!2zWWFyYW4g6YeO6Jit5pSd5b2x5qOa!5e0!3m2!1szh-TW!2stw!4v1752257053005!5m2!1szh-TW!2stw"
-          width="100%"
-          height="100%"
-          style="border:0; border-radius: 1rem;"
-          allowfullscreen
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          title="Google Map">
-        </iframe>
+      <div class="min-h-64">
+        <a href="https://maps.app.goo.gl/DmGdx7EixuXFXsAH9" target="_blank" title="查看 Google Map">
+          <Image src={yaran_map} alt="Yaran 野蘭攝影棚交通地圖" format="webp" quality={85} class="w-full" />
+        </a>
       </div>
     </div>
     <div class="container pb-20">
@@ -100,7 +95,11 @@ const heroImages = [hero1, hero2, hero3, hero4, hero5];
       <p class="text-sm opacity-70">商業攝影的定義為用於宣傳、廣告、行銷目的之拍攝。</p>
       <h3 class="mb-4 mt-8">預約方式</h3>
       <ul class="mb-2">
-        <li>Step1：確認預約時段，並仔細閱讀攝影棚使用規範後，<a href="https://frametime.app/v/yaran-studio" target="_blank">網站填表預約</a></li>
+        <li>
+          Step1：確認預約時段，並仔細閱讀攝影棚使用規範後，<a
+            href="https://frametime.app/v/yaran-studio"
+            target="_blank">網站填表預約</a>
+        </li>
         <li>Step2：一日內支付訂金<a href="/prepaid" target="_blank">（線上金流）</a></li>
         <li>Step3：私訊 FB／IG 提供『預約人姓名』、『預約時間』、『電話』</li>
         <li>Step4：確認預約後，小幫手會將官網日曆更新</li>
@@ -118,8 +117,8 @@ const heroImages = [hero1, hero2, hero3, hero4, hero5];
       <ul class="list-disc pl-6 mb-2">
         <li>本棚開放拍攝日<strong> 90 天至一週前預約</strong>（例如：4/1 拍攝日，可於 1/1-3/24 之間預約）。</li>
         <li>
-          請於預定後一日內支付訂金 1000 元，<strong>取消、改期請於一週前私訊告知，否則不予退費</strong
-          >（例如：4/1 拍攝日，最晚請於 3/24 營業時間內告知）。
+          請於預定後一日內支付訂金 1000 元，<strong>取消、改期請於一週前私訊告知，否則不予退費</strong>（例如：4/1
+          拍攝日，最晚請於 3/24 營業時間內告知）。
         </li>
         <li>當日遲到、早退、缺席不予退費。</li>
         <li>若遇不可抗力因素（如颱風、地震）且政府公告放假，可改期或全額退訂金。</li>
@@ -130,14 +129,14 @@ const heroImages = [hero1, hero2, hero3, hero4, hero5];
           拍攝後一個月內返圖 5 張，即可退款 400 元，請填寫 <a
             href="https://forms.gle/ru7zbkvQNvYzJe8M9"
             target="_blank"
-            class="inline-flex gap-1 items-center">返圖表單 <Icon name="ic:round-open-in-new" /></a>
+            class="inline-flex gap-1 items-center">返圖表單 <Icon name="ic:round-open-in-new" /></a
+          >
         </p>
         <p class="text-sm opacity-70">※ 感謝「可以澀澀攝影棚」提供表單模板</p>
         <a href="https://frametime.app/v/yaran-studio" target="_blank" class="btn btn-primary mt-6"
           >立即預約 <Icon name="ic:round-menu-book" />
         </a>
       </div>
-
     </div>
   </main>
 </Layout>
