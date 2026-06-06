@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import ImageSwiper from "../components/ImageSwiper.astro";
 import { Image } from "astro:assets";
+import floorPlan from "../assets/yaran_floor_plan_tp.png"
 
 // 用 import 進來的 ImageMetadata 物件，Astro 才會優化並轉成 webp
 const otherImages = Object.entries(
@@ -53,6 +54,13 @@ const otherImages = Object.entries(
               <li>Godox BLP LED 投影筒 x1 ── 200 元／次</li>
             </ul>
           </div>
+        </div>
+      </div>
+      <hr />
+      <div class="mb-6">
+        <h2 class="mb-6">✿ 空間平面圖 ✿</h2>
+        <div>
+          <Image src={floorPlan} alt="Yaran 野蘭攝影棚空間平面圖" format="webp" quality={85} class="w-full invert" />
         </div>
       </div>
       <hr />
