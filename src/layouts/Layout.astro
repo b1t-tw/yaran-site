@@ -55,6 +55,13 @@ const description = 'YARAN 野蘭攝影棚';
       fbq('init', '2839746599700251');
       fbq('track', 'PageView');
     </script>
+    <!-- Track frametime.app clicks as InitiateCheckout -->
+    <script is:inline>
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest('a[href*="frametime.app"]');
+        if (a && window.fbq) fbq('track', 'InitiateCheckout');
+      });
+    </script>
     <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=2839746599700251&ev=PageView&noscript=1"
     /></noscript>
