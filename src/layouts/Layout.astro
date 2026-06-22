@@ -61,23 +61,32 @@ const description = 'YARAN 野蘭攝影棚';
         var a = e.target.closest('a[href*="frametime.app"]');
         if (!a) return;
 
-        // Collect utm_* params from the current page URL
+        // Read the original ad attribution from the current page URL
         var pageParams = new URLSearchParams(window.location.search);
-        var utm = {};
-        pageParams.forEach(function (value, key) {
-          if (key.indexOf('utm_') === 0) utm[key] = value;
-        });
+        var src = pageParams.get('utm_source');
+        var medium = pageParams.get('utm_medium');
+        var campaign = pageParams.get('utm_campaign');
 
-        // Append them to the frametime destination URL (without overwriting existing ones)
+        // Frametime is our referrer: identify our site as the source, keep the
+        // campaign, and preserve the original ad attribution under namespaced keys.
+        var handoff = {
+          utm_source: 'yaran-site',
+          utm_medium: 'referral',
+        };
+        if (campaign) handoff.utm_campaign = campaign;
+        if (src) handoff.yaran_src = src;
+        if (medium) handoff.yaran_medium = medium;
+
+        // Append to the frametime destination URL (without overwriting existing params)
         try {
           var dest = new URL(a.href, window.location.origin);
-          Object.keys(utm).forEach(function (key) {
-            if (!dest.searchParams.has(key)) dest.searchParams.set(key, utm[key]);
+          Object.keys(handoff).forEach(function (key) {
+            if (!dest.searchParams.has(key)) dest.searchParams.set(key, handoff[key]);
           });
           a.href = dest.toString();
         } catch (err) {}
 
-        if (window.fbq) fbq('track', 'InitiateCheckout', utm);
+        if (window.fbq) fbq('track', 'InitiateCheckout', handoff);
       });
     </script>
     <noscript><img height="1" width="1" style="display:none"
