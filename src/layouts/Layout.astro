@@ -59,7 +59,25 @@ const description = 'YARAN 野蘭攝影棚';
     <script is:inline>
       document.addEventListener('click', function (e) {
         var a = e.target.closest('a[href*="frametime.app"]');
-        if (a && window.fbq) fbq('track', 'InitiateCheckout');
+        if (!a) return;
+
+        // Collect utm_* params from the current page URL
+        var pageParams = new URLSearchParams(window.location.search);
+        var utm = {};
+        pageParams.forEach(function (value, key) {
+          if (key.indexOf('utm_') === 0) utm[key] = value;
+        });
+
+        // Append them to the frametime destination URL (without overwriting existing ones)
+        try {
+          var dest = new URL(a.href, window.location.origin);
+          Object.keys(utm).forEach(function (key) {
+            if (!dest.searchParams.has(key)) dest.searchParams.set(key, utm[key]);
+          });
+          a.href = dest.toString();
+        } catch (err) {}
+
+        if (window.fbq) fbq('track', 'InitiateCheckout', utm);
       });
     </script>
     <noscript><img height="1" width="1" style="display:none"
