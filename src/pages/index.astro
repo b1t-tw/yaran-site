@@ -2,6 +2,8 @@
 import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
+import EntryPersonnel from "../components/EntryPersonnel.astro";
+import BookingNotice from "../components/BookingNotice.astro";
 import { Icon } from "astro-icon/components";
 import logoH from "../assets/logo_h_gold.png";
 import logoV from "../assets/logo_v_gold.png";
@@ -105,25 +107,10 @@ const heroImages = [hero1, hero2, hero3, hero4, hero5];
         <li>Step4：確認預約後，小幫手會將官網日曆更新</li>
         <li>Step5：當天入場時繳餘款（可用現金、金流付款）</li>
       </ul>
-      <h3 class="mb-4 mt-8">入場人員</h3>
-      <ul class="list-disc pl-6 mb-2">
-        <li>入場人員<strong>總共最多 6 位，包含 3 位攝影師</strong>（手機不在此限）。</li>
-        <li>若有增加人數，每人需酌收 200 元 / 小時，攝影師需酌收 300 元 / 小時 ，增加後總人數最多 10 人。</li>
-        <li>若純拍娃、bjd 可全員攝影，若經發現有拍攝真人模特則即刻加收攝影師總時數人頭費。</li>
-        <li>若有 12 歲以下孩童請提前告知。</li>
-        <li>目前暫不開放寵物入場。</li>
-      </ul>
-      <h3 class="mb-4 mt-8">注意事項</h3>
-      <ul class="list-disc pl-6 mb-2">
-        <li>本棚開放拍攝日<strong> 90 天至一週前預約</strong>（例如：4/1 拍攝日，可於 1/1-3/24 之間預約）。</li>
-        <li>
-          請於預定後一日內支付訂金 1000 元，<strong>取消、改期請於一週前私訊告知，否則不予退費</strong>（例如：4/1
-          拍攝日，最晚請於 3/24 營業時間內告知）。
-        </li>
-        <li>當日遲到、早退、缺席不予退費。</li>
-        <li>若遇不可抗力因素（如颱風、地震）且政府公告放假，可改期或全額退訂金。</li>
+      <EntryPersonnel />
+      <BookingNotice>
         <li>更多注意事項請見<a href="/rules" class="text-primary-light">租棚須知</a>。</li>
-      </ul>
+      </BookingNotice>
       <div class="mt-8">
         <p>
           拍攝後一個月內返圖 5 張，即可退款 400 元，請填寫 <a
