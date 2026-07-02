@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import { loadGalleryItems } from "../lib/gallery";
 
 interface Props {
   /** 相對於 src/assets/images 的資料夾名稱，例如 "tea-shop" */
@@ -11,34 +12,28 @@ interface Props {
 
 const { dir, alt, class: className } = Astro.props;
 
-// glob 的 pattern 必須是字串字面值，所以掃整個 images 後再依 dir 過濾
-const allImages = import.meta.glob<{ default: ImageMetadata }>(
-  "/src/assets/images/**/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG}",
-  { eager: true },
-);
-
-const prefix = `/src/assets/images/${dir.replace(/^\/|\/$/g, "")}/`;
-const images = Object.entries(allImages)
-  .filter(([path]) => path.startsWith(prefix))
-  .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
-  .map(([, mod]) => mod.default);
+const items = await loadGalleryItems(dir);
 ---
 
 {
-  images.length > 0 && (
+  items.length > 0 && (
     <div class:list={["gallery-swiper swiper", className]}>
       <div class="swiper-wrapper">
-        {images.map((img, i) => (
-          <div class="swiper-slide">
+        {items.map((item, i) => (
+          <div
+            class="swiper-slide"
+            data-pswp-src={item.full.src}
+            data-pswp-width={item.full.attributes.width}
+            data-pswp-height={item.full.attributes.height}>
             <Image
-              src={img}
+              src={item.thumb}
               alt={`${alt ?? dir} ${i + 1}`}
               format="webp"
               quality={80}
               width={800}
               height={800}
               loading={i === 0 ? "eager" : "lazy"}
-              class="h-full w-full object-contain"
+              class="h-full w-full object-contain cursor-zoom-in"
             />
           </div>
         ))}
@@ -53,10 +48,12 @@ const images = Object.entries(allImages)
   import { Autoplay, Pagination, Keyboard, A11y } from "swiper/modules";
   import "swiper/css";
   import "swiper/css/pagination";
+  import PhotoSwipeLightbox from "photoswipe/lightbox";
+  import "photoswipe/style.css";
 
   // 頁面上每個 .gallery-swiper 各自初始化（支援多個 instance）
   document.querySelectorAll<HTMLElement>(".gallery-swiper").forEach((el) => {
-    new Swiper(el, {
+    const swiper = new Swiper(el, {
       modules: [Autoplay, Pagination, Keyboard, A11y],
       loop: true,
       spaceBetween: 16,
@@ -67,6 +64,33 @@ const images = Object.entries(allImages)
       keyboard: { enabled: true },
       pagination: { el: el.querySelector(".swiper-pagination"), clickable: true },
     });
+
+    // 依原始 slide（排除 loop 複製）順序建立燈箱資料
+    const dataSource = Array.from(
+      el.querySelectorAll<HTMLElement>(".swiper-slide:not(.swiper-slide-duplicate)"),
+    ).map((slide) => ({
+      src: slide.dataset.pswpSrc!,
+      width: Number(slide.dataset.pswpWidth),
+      height: Number(slide.dataset.pswpHeight),
+    }));
+
+    const lightbox = new PhotoSwipeLightbox({
+      dataSource,
+      pswpModule: () => import("photoswipe"),
+    });
+    lightbox.init();
+
+    // 點擊（非拖曳）開啟燈箱；用 realIndex 對應原始圖片順序
+    swiper.on("click", () => {
+      const slide = swiper.clickedSlide;
+      if (!slide) return;
+      const realIndex = Number(slide.getAttribute("data-swiper-slide-index") ?? swiper.clickedIndex);
+      lightbox.loadAndOpen(realIndex);
+    });
+
+    // 燈箱開啟時暫停自動輪播，關閉後恢復
+    lightbox.on("beforeOpen", () => swiper.autoplay.stop());
+    lightbox.on("close", () => swiper.autoplay.start());
   });
 </script>
 

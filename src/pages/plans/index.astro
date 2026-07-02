@@ -2,20 +2,12 @@
 import Layout from "../../layouts/Layout.astro";
 import { Image } from "astro:assets";
 import { plans } from "../../data/plans";
+import { loadImages } from "../../lib/gallery";
 
 // 取每個方案資料夾的第一張圖當封面
-const allImages = import.meta.glob<{ default: ImageMetadata }>(
-  "/src/assets/images/plans/**/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG}",
-  { eager: true },
+const covers = await Promise.all(
+  plans.map((plan) => loadImages(`plans/${plan.imageDir}`).then((imgs) => imgs[0])),
 );
-
-const cover = (dir: string) => {
-  const prefix = `/src/assets/images/plans/${dir}/`;
-  const first = Object.entries(allImages)
-    .filter(([path]) => path.startsWith(prefix))
-    .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))[0];
-  return first?.[1].default;
-};
 ---
 
 <Layout title="攝影方案">
@@ -24,8 +16,8 @@ const cover = (dir: string) => {
     <div class="container">
       <div class="grid gap-8 md:grid-cols-2">
         {
-          plans.map((plan) => {
-            const img = cover(plan.imageDir);
+          plans.map((plan, i) => {
+            const img = covers[i];
             return (
               <a href={`/plans/${plan.slug}`} class="group block">
                 {img && (

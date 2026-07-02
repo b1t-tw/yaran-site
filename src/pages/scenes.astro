@@ -1,18 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ImageSwiper from "../components/ImageSwiper.astro";
+import PhotoGallery from "../components/PhotoGallery.astro";
 import { Image } from "astro:assets";
 import floorPlan from "../assets/yaran_floor_plan_tp.png"
-
-// 用 import 進來的 ImageMetadata 物件，Astro 才會優化並轉成 webp
-const otherImages = Object.entries(
-  import.meta.glob<{ default: ImageMetadata }>(
-    "/src/assets/images/other/*.{jpg,jpeg,png,JPG,JPEG,PNG}",
-    { eager: true },
-  ),
-)
-  .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
-  .map(([, mod]) => mod.default);
 ---
 
 <Layout title="棚景介紹">
@@ -122,25 +113,33 @@ const otherImages = Object.entries(
         <p>禁止「穿鞋」、「赤腳」上榻榻米</p>
       </div>
       <hr />
+      <div class="mb-6">
+        <h2 class="mb-6">𖠁 野蘭小劇場 𖠁</h2>
+        <div class="grid md:grid-cols-2 mb-6 gap-6">
+          <div class="md:order-1 min-w-1 w-full">
+            <ImageSwiper dir="theatre" />
+          </div>
+          <div class="flex flex-col justify-center">
+            百貨店的玻璃櫥窗外，時髦男女駐足觀望。<br>
+            深藍布幔低垂，金色雕刻畫框交織出奇幻時空；<br>
+            精緻洋服如魅影般懸掛，靜待主角現身。<br>
+            對於生活的憧憬與幻想，在此華麗登台。
+          </div>
+        </div>
+        <p>⊱✿⊰</p>
+        <h3 class="mt-4 mb-3">✧ 場景道具 ✧</h3>
+        <p>畫框、仿真花、吊掛用衣架</p>
+        <h3 class="mt-4 mb-3">✧ 注意事項 ✧</h3>
+        <ul class="list-disc pl-6 mb-2">
+          <li>相框請勿掛上過重物品或整個人坐上去</li>
+          <li>此棚景將不定時更新</li>
+        </ul>
+      </div>
+      <hr />
 
       <div class="mb-6">
         <h2 class="mb-8">𖠁 其他場景照片 𖠁</h2>
-        <div class="grid grid-cols-2 md:grid-cols-3 mb-6 gap-6">
-          {
-            otherImages.map((img) => (
-              <Image
-                src={img}
-                alt="Yaran 野蘭攝影棚其他場景照"
-                format="webp"
-                quality={80}
-                width={800}
-                height={800}
-                loading="lazy"
-                class="w-full aspect-square object-cover drop-shadow-lg rounded-lg"
-              />
-            ))
-          }
-        </div>
+        <PhotoGallery dir="other" alt="Yaran 野蘭攝影棚其他場景照" />
       </div>
     </div>
   </main>

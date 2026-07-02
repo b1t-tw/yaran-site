@@ -1,8 +1,9 @@
 ---
-import { Image, getImage } from "astro:assets";
+import { Image } from "astro:assets";
+import { loadGalleryItems } from "../lib/gallery";
 
 interface Props {
-  /** 相對於 src/assets/images/plans 的資料夾名稱，例如 "misora" */
+  /** 相對於 src/assets/images 的資料夾名稱，例如 "plans/misora"、"other" */
   dir: string;
   /** 圖片 alt 前綴 */
   alt?: string;
@@ -10,30 +11,13 @@ interface Props {
 
 const { dir, alt } = Astro.props;
 
-// glob pattern 必須是字串字面值，掃整個 plans 後再依 dir 過濾
-const allImages = import.meta.glob<{ default: ImageMetadata }>(
-  "/src/assets/images/plans/**/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG}",
-  { eager: true },
-);
-
-const prefix = `/src/assets/images/plans/${dir.replace(/^\/|\/$/g, "")}/`;
-const images = Object.entries(allImages)
-  .filter(([path]) => path.startsWith(prefix))
-  .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
-  .map(([, mod]) => mod.default);
-
-// 產生燈箱用的大圖（webp），並取得最佳化後的實際寬高供 PhotoSwipe 使用
-const items = await Promise.all(
-  images.map(async (img) => {
-    const full = await getImage({ src: img, format: "webp", quality: 82, width: 1600 });
-    return { thumb: img, full };
-  }),
-);
+const slug = dir.replace(/^\/|\/$/g, "");
+const items = await loadGalleryItems(dir);
 ---
 
 {
   items.length > 0 && (
-    <div id={`gallery-${dir}`} class="photo-gallery grid grid-cols-2 md:grid-cols-3 gap-4">
+    <div id={`gallery-${slug.replace(/\//g, "-")}`} class="photo-gallery grid grid-cols-2 md:grid-cols-3 gap-4">
       {items.map((item, i) => (
         <a
           href={item.full.src}
