@@ -1,0 +1,23 @@
+---
+import { plans } from "../data/plans";
+
+const currentPath = Astro.url.pathname;
+const isActive = (slug: string) =>
+  currentPath === `/plans/${slug}` || currentPath === `/plans/${slug}/`;
+---
+
+<nav class="border-b border-[#fff3] mb-8">
+  <ul class="flex gap-6 justify-center overflow-x-auto px-4 py-3 font-semibold whitespace-nowrap">
+    {
+      plans.map((plan) => (
+        <li>
+          <a
+            href={`/plans/${plan.slug}`}
+            class={`pb-1 border-b-2 border-transparent hover:border-amber-100 hover:!opacity-100 transition ${isActive(plan.slug) ? "!border-amber-50" : ""}`}>
+            {plan.title}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
