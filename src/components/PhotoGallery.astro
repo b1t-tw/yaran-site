@@ -7,9 +7,11 @@ interface Props {
   dir: string;
   /** 圖片 alt 前綴 */
   alt?: string;
+  /** 燈箱圖說，依圖片排序對應（可留空跳過某張） */
+  captions?: string[];
 }
 
-const { dir, alt } = Astro.props;
+const { dir, alt, captions } = Astro.props;
 
 const slug = dir.replace(/^\/|\/$/g, "");
 const items = await loadGalleryItems(dir);
@@ -23,6 +25,7 @@ const items = await loadGalleryItems(dir);
           href={item.full.src}
           data-pswp-width={item.full.attributes.width}
           data-pswp-height={item.full.attributes.height}
+          data-pswp-caption={captions?.[i]}
           target="_blank"
           rel="noreferrer"
           class="block overflow-hidden rounded-lg">
@@ -45,13 +48,18 @@ const items = await loadGalleryItems(dir);
 <script>
   import PhotoSwipeLightbox from "photoswipe/lightbox";
   import "photoswipe/style.css";
+  import { enhanceLightbox } from "../lib/lightbox";
 
   document.querySelectorAll<HTMLElement>(".photo-gallery").forEach((el) => {
+    // 有任一張帶圖說時，照片不滿版：底部留白放圖說
+    const hasCaptions = el.querySelector("a[data-pswp-caption]") !== null;
+
     const lightbox = new PhotoSwipeLightbox({
       gallery: `#${el.id}`,
       children: "a",
       pswpModule: () => import("photoswipe"),
     });
+    enhanceLightbox(lightbox, hasCaptions);
     lightbox.init();
   });
 </script>

@@ -50,6 +50,7 @@ const items = await loadGalleryItems(dir);
   import "swiper/css/pagination";
   import PhotoSwipeLightbox from "photoswipe/lightbox";
   import "photoswipe/style.css";
+  import { enhanceLightbox } from "../lib/lightbox";
 
   // 頁面上每個 .gallery-swiper 各自初始化（支援多個 instance）
   document.querySelectorAll<HTMLElement>(".gallery-swiper").forEach((el) => {
@@ -78,6 +79,7 @@ const items = await loadGalleryItems(dir);
       dataSource,
       pswpModule: () => import("photoswipe"),
     });
+    enhanceLightbox(lightbox);
     lightbox.init();
 
     // 點擊（非拖曳）開啟燈箱；用 realIndex 對應原始圖片順序

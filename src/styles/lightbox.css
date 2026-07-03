@@ -1,0 +1,49 @@
+/* PhotoSwipe 燈箱共用增強 UI，由 src/lib/lightbox.ts 載入（PhotoGallery / ImageSwiper 共用） */
+
+/* 燈箱底部圖說（照片下方留白區，圓點上方） */
+.pswp__custom-caption {
+  position: absolute;
+  bottom: 42px;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  text-align: center;
+  padding: 0 24px;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
+/* 燈箱底部圓點 pagination */
+.pswp__bullets-indicator {
+  position: absolute;
+  bottom: 18px;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  padding: 0 16px;
+  pointer-events: none;
+}
+.pswp__bullet {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  pointer-events: auto;
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+.pswp__bullet--active {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.3);
+}
