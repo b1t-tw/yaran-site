@@ -18,6 +18,18 @@ export function enhanceLightbox(lightbox: PhotoSwipeLightbox, hasCaptions = fals
     lightbox.options.padding = { top: 20, bottom: 96, left: 16, right: 16 };
   }
 
+  // 手機觸控只走 tapAction（預設 toggle-controls，不會關閉），桌面滑鼠才有 bgClickAction。
+  // 覆寫 tapAction：點到圖片外的背景 → 關閉；點圖片本身 → 沿用預設切換控制列。
+  lightbox.options.tapAction = (_point, e) => {
+    const pswp = lightbox.pswp as any;
+    const cls = (e.target as HTMLElement).classList;
+    if (cls.contains("pswp__item") || cls.contains("pswp__zoom-wrap")) {
+      pswp.close();
+    } else {
+      pswp.element?.classList.toggle("pswp--ui-visible");
+    }
+  };
+
   lightbox.on("uiRegister", () => {
     const pswp = lightbox.pswp as any;
     if (!pswp) return;

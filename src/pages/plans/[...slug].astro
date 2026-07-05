@@ -1,0 +1,28 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PlanTabs from "../../components/PlanTabs.astro";
+import PhotoGallery from "../../components/PhotoGallery.astro";
+import { plans } from "../../data/plans";
+
+export function getStaticPaths() {
+  return plans.map((plan) => ({
+    params: { slug: plan.slug },
+    props: { plan },
+  }));
+}
+
+const { plan } = Astro.props;
+---
+
+<Layout title={`和服方案│${plan.title}`}>
+  <div slot="subtitle" class="mb-8">{plan.type}</div>
+  <PlanTabs />
+  <main class="pb-8">
+    <div class="container">
+      <div class="mb-6">
+        <h2 class="mb-6">✿ 照片集 ✿</h2>
+        <PhotoGallery dir={`plans/${plan.imageDir}`} alt={plan.title} objectfit="cover" />
+      </div>
+    </div>
+  </main>
+</Layout>

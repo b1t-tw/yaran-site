@@ -3,7 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import ImageSwiper from "../components/ImageSwiper.astro";
 import PhotoGallery from "../components/PhotoGallery.astro";
 import { Image } from "astro:assets";
-import floorPlan from "../assets/yaran_floor_plan_tp.png"
+import floorPlan from "../assets/yaran_floor_plan_tp.png";
 ---
 
 <Layout title="棚景介紹">
@@ -53,7 +53,7 @@ import floorPlan from "../assets/yaran_floor_plan_tp.png"
       <hr />
       <div class="mb-6">
         <h2 class="mb-6">✿ 空間平面圖 ✿</h2>
-        <div>
+        <div class="p-1 bg-primary/50">
           <Image src={floorPlan} alt="Yaran 野蘭攝影棚空間平面圖" format="webp" quality={85} class="w-full invert" />
         </div>
       </div>
@@ -120,9 +120,9 @@ import floorPlan from "../assets/yaran_floor_plan_tp.png"
             <ImageSwiper dir="theatre" />
           </div>
           <div class="flex flex-col justify-center">
-            百貨店的玻璃櫥窗外，時髦男女駐足觀望。<br>
-            深藍布幔低垂，金色雕刻畫框交織出奇幻時空；<br>
-            精緻洋服如魅影般懸掛，靜待主角現身。<br>
+            百貨店的玻璃櫥窗外，時髦男女駐足觀望。<br />
+            深藍布幔低垂，金色雕刻畫框交織出奇幻時空；<br />
+            精緻洋服如魅影般懸掛，靜待主角現身。<br />
             對於生活的憧憬與幻想，在此華麗登台。
           </div>
         </div>

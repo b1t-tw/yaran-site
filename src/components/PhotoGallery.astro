@@ -9,9 +9,10 @@ interface Props {
   alt?: string;
   /** 燈箱圖說，依圖片排序對應（可留空跳過某張） */
   captions?: string[];
+  objectfit?: string;
 }
 
-const { dir, alt, captions } = Astro.props;
+const { dir, alt, captions, objectfit } = Astro.props;
 
 const slug = dir.replace(/^\/|\/$/g, "");
 const items = await loadGalleryItems(dir);
@@ -37,7 +38,7 @@ const items = await loadGalleryItems(dir);
             width={800}
             height={800}
             loading={i < 3 ? "eager" : "lazy"}
-            class="w-full aspect-square object-cover drop-shadow-lg transition duration-300 hover:scale-105"
+            class={`w-full aspect-square drop-shadow-lg bg-white transition duration-300 hover:scale-105 ${objectfit ? `object-${objectfit}` : "object-cover"}`}
           />
         </a>
       ))}
@@ -58,6 +59,7 @@ const items = await loadGalleryItems(dir);
       gallery: `#${el.id}`,
       children: "a",
       pswpModule: () => import("photoswipe"),
+      bgClickAction: "close"
     });
     enhanceLightbox(lightbox, hasCaptions);
     lightbox.init();
