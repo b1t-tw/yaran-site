@@ -13,10 +13,12 @@
     @apply bg-primary text-amber-50 text-base leading-relaxed m-0;
     font-weight: 400;
     &::before {
-      @apply fixed inset-0;
+      @apply fixed inset-0 bg-primary;
       content: "";
-      background-image: url("/pattern1.png");
+      background-image: var(--background-pattern);
       background-repeat: repeat;
+      background-size: 300px;
+      background-blend-mode: hard-light;
       opacity: 0.03;
       z-index: -1;
       pointer-events: none;

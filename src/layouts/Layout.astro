@@ -10,6 +10,11 @@ interface Props {
 const { title } = Astro.props;
 const fullTitle = `${title} - YARAN 野蘭攝影棚`;
 const description = 'YARAN 野蘭攝影棚';
+
+// 背景圖樣清單（放在 public/patterns/），每次載入隨機挑一張
+const patterns = Object.keys(import.meta.glob('/public/patterns/*.png')).map(
+  (path) => path.replace('/public', '')
+);
 ---
 <!doctype html>
 <html lang="zh-Hant">
@@ -17,6 +22,16 @@ const description = 'YARAN 野蘭攝影棚';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/png" href="/logo_icon.png" />
+    <script is:inline define:vars={{ patterns }}>
+      // 每次載入隨機選一張背景圖樣，設定給 body::before 使用
+      if (patterns.length) {
+        const pick = patterns[Math.floor(Math.random() * patterns.length)];
+        document.documentElement.style.setProperty(
+          '--background-pattern',
+          `url("${pick}")`
+        );
+      }
+    </script>
     <title>{fullTitle}</title>
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
@@ -28,6 +43,8 @@ const description = 'YARAN 野蘭攝影棚';
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q3919S3X7X"></script>
     <script is:inline>
+import { swapBodyElement } from "astro/virtual-modules/transitions-swap-functions.js";
+
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
