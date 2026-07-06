@@ -8,6 +8,7 @@ export interface Plan {
   /** src/assets/images/plans/ 底下的資料夾名 */
   imageDir: string;
   type: string;
+  intro?: string;
 }
 
 export const plans: Plan[] = [
@@ -15,37 +16,43 @@ export const plans: Plan[] = [
     slug: "misora/1",
     title: "蛇皮",
     imageDir: "misora/蛇皮",
-    type: "A 滿版小紋和服"
+    type: "A 滿版小紋和服",
+    intro: "身高 169cm 以內\n袖長 67.5cm\n臀圍 103cm 以內"
   },
   {
     slug: "misora/2",
     title: "西洋棋",
     imageDir: "misora/西洋棋",
-    type: "A 滿版小紋和服"
+    type: "A 滿版小紋和服",
+    intro: "身高 173cm 以內\n袖長 67cm\n臀圍 104cm 以內"
   },
   {
     slug: "misora/3",
     title: "黑色麻葉",
     imageDir: "misora/黑色麻葉",
-    type: "A 滿版小紋和服"
+    type: "A 滿版小紋和服",
+    intro: "身高 169cm 以內\n袖長 66cm\n臀圍 103cm 以內"
   },
   {
     slug: "misora/4",
     title: "白色鴛鴦訪問着",
     imageDir: "misora/白色鴛鴦訪問着",
-    type: "B 精緻訪問着"
+    type: "B 精緻訪問着",
+    intro: "身高 163cm 以內\n袖長 66cm\n臀圍 103cm 以內"
   },
   {
     slug: "misora/5",
     title: "銀色單層訪問着",
     imageDir: "misora/銀色單層訪問着",
-    type: "B 精緻訪問着"
+    type: "B 精緻訪問着",
+    intro: "身高 171cm 以內\n袖長 68cm\n臀圍 106cm 以內"
   },
   {
     slug: "misora/6",
     title: "紅色留袖",
     imageDir: "misora/紅色留袖",
-    type: "B 精緻訪問着"
+    type: "B 精緻訪問着",
+    intro: "身高 165cm 以內\n袖長 67cm\n臀圍 103cm 以內"
   },
 ];
 

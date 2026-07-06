@@ -4,6 +4,8 @@ import { Image } from "astro:assets";
 import { plans } from "../../data/plans";
 import { loadImages } from "../../lib/gallery";
 import { Icon } from "astro-icon/components";
+import misora_avatar from "../../assets/misora_avatar.jpg";
+import yamamusume_avatar from "../../assets/yamamusume_avatar.jpg";
 
 // 取每個方案資料夾的第一張圖當封面
 const covers = await Promise.all(plans.map((plan) => loadImages(`plans/${plan.imageDir}`).then((imgs) => imgs[0])));
@@ -12,8 +14,30 @@ const covers = await Promise.all(plans.map((plan) => loadImages(`plans/${plan.im
 <Layout title="和服方案">
   <div class="mb-8 container" slot="subtitle">
     <div class="mb-8">
-      <p>野蘭攝影棚 x 御空和服 x 藍鵲和服</p>
+      <p>野蘭攝影棚 x 御空和服 x 藍鵲和洋</p>
       <p>即將開放預約</p>
+      <div class="flex items-center justify-center gap-8 my-8">
+        <a href="https://www.instagram.com/misora_kimono/" title="御空和服 IG" target="_blank" class="block">
+          <Image
+            src={misora_avatar}
+            format="webp"
+            quality={85}
+            alt="御空和服"
+            width={200}
+            class="rounded-full w-24 h-24 object-cover"
+          />
+        </a>
+        <a href="https://www.instagram.com/yamamusume_kimono/" title="藍鵲和洋 IG"  target="_blank" class="block">
+          <Image
+            src={yamamusume_avatar}
+            format="webp"
+            quality={85}
+            alt="藍鵲和洋"
+            width={200}
+            class="rounded-full w-24 h-24 object-cover"
+          />
+        </a>
+      </div>
     </div>
     <div class="mb-8 grid md:grid-cols-2 gap-8 text-start text-amber-50">
       <div class="border border-[#fff3] rounded-xl p-4 bg-primary/50">
