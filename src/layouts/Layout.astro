@@ -24,8 +24,13 @@ const patterns = Object.keys(import.meta.glob('/public/patterns/*.png')).map(
     <link rel="icon" type="image/png" href="/logo_icon.png" />
     <script is:inline define:vars={{ patterns }}>
       // 每次載入隨機選一張背景圖樣，設定給 body::before 使用
+      // 換頁時排除上一張，確保一定會換成不同的圖樣
       if (patterns.length) {
-        const pick = patterns[Math.floor(Math.random() * patterns.length)];
+        const last = sessionStorage.getItem('background-pattern');
+        const candidates = patterns.filter((p) => p !== last);
+        const pool = candidates.length ? candidates : patterns;
+        const pick = pool[Math.floor(Math.random() * pool.length)];
+        sessionStorage.setItem('background-pattern', pick);
         document.documentElement.style.setProperty(
           '--background-pattern',
           `url("${pick}")`
