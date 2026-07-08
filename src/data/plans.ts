@@ -14,14 +14,14 @@ export interface Plan {
 export const plans: Plan[] = [
   {
     slug: "misora/1",
-    title: "蛇皮",
+    title: "蛇皮小紋",
     imageDir: "misora/蛇皮",
     type: "A 滿版小紋和服",
     intro: "身高 169cm 以內\n袖長 67.5cm\n臀圍 103cm 以內"
   },
   {
     slug: "misora/2",
-    title: "西洋棋",
+    title: "西洋棋小紋",
     imageDir: "misora/西洋棋",
     type: "A 滿版小紋和服",
     intro: "身高 173cm 以內\n袖長 67cm\n臀圍 104cm 以內"
