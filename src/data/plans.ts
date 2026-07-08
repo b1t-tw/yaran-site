@@ -28,7 +28,7 @@ export const plans: Plan[] = [
   },
   {
     slug: "misora/3",
-    title: "黑色麻葉",
+    title: "黑色麻葉小紋",
     imageDir: "misora/黑色麻葉",
     type: "A 滿版小紋和服",
     intro: "身高 169cm 以內\n袖長 66cm\n臀圍 103cm 以內"

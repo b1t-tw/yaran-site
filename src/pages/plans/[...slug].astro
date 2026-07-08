@@ -15,7 +15,7 @@ const { plan } = Astro.props;
 ---
 
 <Layout title={`和服方案│${plan.title}`}>
-  <div slot="subtitle" class="mb-8">{plan.type}</div>
+  <div slot="subtitle" class="mb-8">方案 {plan.type}</div>
   <PlanTabs />
   <main class="pb-8">
     <div class="container mb-8">

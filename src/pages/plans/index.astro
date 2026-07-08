@@ -27,7 +27,7 @@ const covers = await Promise.all(plans.map((plan) => loadImages(`plans/${plan.im
             class="rounded-full w-24 h-24 object-cover"
           />
         </a>
-        <a href="https://www.instagram.com/yamamusume_kimono/" title="藍鵲和洋 IG"  target="_blank" class="block">
+        <a href="https://www.instagram.com/yamamusume_kimono/" title="藍鵲和洋 IG" target="_blank" class="block">
           <Image
             src={yamamusume_avatar}
             format="webp"
@@ -80,19 +80,21 @@ const covers = await Promise.all(plans.map((plan) => loadImages(`plans/${plan.im
             const img = covers[i];
             return (
               <a href={`/plans/${plan.slug}`} class="group block no-underline">
-                {img && (
-                  <div class="overflow-hidden rounded-lg relative">
-                    <Image
-                      src={img}
-                      alt={plan.title}
-                      format="webp"
-                      quality={80}
-                      width={500}
-                      class="w-full aspect-[2/3] object-cover drop-shadow-lg transition duration-300 group-hover:scale-105"
-                    />
-                    <div class="absolute z-1 right-1 top-1 text-xs text-black">{plan.type}</div>
-                  </div>
-                )}
+                <div class=" overflow-hidden rounded-lg">
+                  {img && (
+                    <div class="overflow-hidden relative">
+                      <Image
+                        src={img}
+                        alt={plan.title}
+                        format="webp"
+                        quality={80}
+                        width={500}
+                        class="w-full aspect-[2/3] object-cover drop-shadow-lg transition duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                  )}
+                  <div class="text-xs text-black bg-white w-full text-center z-1">{plan.type}</div>
+                </div>
                 <h4 class="mt-4 text-center group-hover:opacity-80 transition">{plan.title}</h4>
               </a>
             );
