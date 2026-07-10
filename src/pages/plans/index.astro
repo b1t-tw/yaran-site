@@ -79,8 +79,8 @@ const covers = await Promise.all(plans.map((plan) => loadImages(`plans/${plan.im
           plans.map((plan, i) => {
             const img = covers[i];
             return (
-              <a href={`/plans/${plan.slug}`} class="group block no-underline">
-                <div class=" overflow-hidden rounded-lg">
+              <a href={`/plans/${plan.slug}`} class="group block no-underline !opacity-100">
+                <div class="relative overflow-hidden rounded-lg">
                   {img && (
                     <div class="overflow-hidden relative">
                       <Image
@@ -89,11 +89,13 @@ const covers = await Promise.all(plans.map((plan) => loadImages(`plans/${plan.im
                         format="webp"
                         quality={80}
                         width={500}
-                        class="w-full aspect-[2/3] object-cover drop-shadow-lg transition duration-300 group-hover:scale-105"
+                        class="w-full aspect-[2/3] object-cover drop-shadow-lg"
                       />
                     </div>
                   )}
-                  <div class="text-xs text-black bg-white w-full text-center z-1">{plan.type}</div>
+                  <div class="text-xs text-white bg-black/50 w-full text-center z-1 absolute bottom-0 transition md:translate-y-full group-hover:translate-y-0">
+                    {plan.type}
+                  </div>
                 </div>
                 <h4 class="mt-4 text-center group-hover:opacity-80 transition">{plan.title}</h4>
               </a>

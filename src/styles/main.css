@@ -38,7 +38,7 @@
     @apply mb-1;
   }
   a[href] {
-    @apply transition-opacity duration-200 hover:opacity-75;
+    @apply transition-opacity duration-200 hover:opacity-80;
   }
   main a[href] {
     @apply underline hover:opacity-75;
