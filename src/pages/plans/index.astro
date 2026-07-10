@@ -9,6 +9,7 @@ import yamamusume_avatar from "../../assets/yamamusume_avatar.jpg";
 
 // 取每個方案資料夾的第一張圖當封面
 const covers = await Promise.all(plans.map((plan) => loadImages(`plans/${plan.imageDir}`).then((imgs) => imgs[0])));
+const covers_b = await Promise.all(plans.map((plan) => loadImages(`plans/${plan.imageDir}`).then((imgs) => imgs[1])));
 ---
 
 <Layout title="和服方案">
@@ -78,6 +79,7 @@ const covers = await Promise.all(plans.map((plan) => loadImages(`plans/${plan.im
         {
           plans.map((plan, i) => {
             const img = covers[i];
+            const img_b = covers_b[i];
             return (
               <a href={`/plans/${plan.slug}`} class="group block no-underline !opacity-100">
                 <div class="relative overflow-hidden rounded-lg">
@@ -89,7 +91,15 @@ const covers = await Promise.all(plans.map((plan) => loadImages(`plans/${plan.im
                         format="webp"
                         quality={80}
                         width={500}
-                        class="w-full aspect-[2/3] object-cover drop-shadow-lg"
+                        class="w-full aspect-[2/3] object-cover"
+                      />
+                      <Image
+                        src={img_b}
+                        alt={plan.title}
+                        format="webp"
+                        quality={80}
+                        width={500}
+                        class="w-full aspect-[2/3] object-cover absolute top-0 left-0 transition-opacity opacity-0 group-hover:opacity-100"
                       />
                     </div>
                   )}
