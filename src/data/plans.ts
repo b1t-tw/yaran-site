@@ -55,37 +55,37 @@ export const plans: Plan[] = [
     intro: "身高 165cm 以內\n袖長 67cm\n臀圍 103cm 以內"
   },
   {
-    slug: "momoe/1",
+    slug: "yamamusume/1",
     title: "哈密瓜",
-    imageDir: "momoe/哈密瓜",
+    imageDir: "yamamusume/哈密瓜",
     type: "C 和洋折衷",
     intro: "衣長：138.5cm\n袖長：63cm\n適合身高：158cm\n適合臀圍：95cm"
   },
   {
-    slug: "momoe/2",
+    slug: "yamamusume/2",
     title: "菱形火焰",
-    imageDir: "momoe/菱形火焰",
+    imageDir: "yamamusume/菱形火焰",
     type: "C 和洋折衷",
     intro: "衣長：162cm\n袖長：65.5cm\n適合身高：172cm\n適合臀圍：105cm"
   },
   {
-    slug: "momoe/3",
+    slug: "yamamusume/3",
     title: "紅粉方格",
-    imageDir: "momoe/紅粉方格",
+    imageDir: "yamamusume/紅粉方格",
     type: "C 和洋折衷",
     intro: "衣長：154cm\n袖長：62cm\n適合身高：174cm\n適合臀圍：105cm"
   },
   {
-    slug: "momoe/4",
+    slug: "yamamusume/4",
     title: "黑色點點",
-    imageDir: "momoe/黑色點點",
+    imageDir: "yamamusume/黑色點點",
     type: "C 和洋折衷",
     intro: "衣長：150cm\n袖長：61cm\n適合身高：170cm\n適合臀圍：105cm"
   },
   {
-    slug: "momoe/5",
+    slug: "yamamusume/5",
     title: "彩虹扇紋",
-    imageDir: "momoe/彩虹扇紋",
+    imageDir: "yamamusume/彩虹扇紋",
     type: "C 和洋折衷",
     intro: "衣長：152cm\n袖長：63cm\n適合身高：172cm\n適合臀圍：105cm"
   },
