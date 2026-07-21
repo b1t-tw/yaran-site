@@ -6,8 +6,8 @@ const isActive = (slug: string) =>
   currentPath === `/plans/${slug}` || currentPath === `/plans/${slug}/`;
 ---
 
-<nav class="border-b border-[#fff3] mb-8">
-  <ul class="flex flex-wrap gap-4 md:gap-6 justify-center px-4 py-3 font-semibold whitespace-nowrap">
+<nav class="border-b border-[#fff3]">
+  <ul class="flex flex-wrap gap-x-4 md:gap-x-6 gap-y-2 justify-center px-4 pt-4 pb-3 font-semibold whitespace-nowrap">
     {
       plans.map((plan) => (
         <li>

@@ -40,7 +40,7 @@ const covers_b = await Promise.all(plans.map((plan) => loadImages(`plans/${plan.
         </a>
       </div>
     </div>
-    <div class="mb-8 grid md:grid-cols-2 gap-8 text-start text-amber-50">
+    <div class="mb-8 grid md:grid-cols-3 gap-8 text-start text-amber-50">
       <div class="border border-[#fff3] rounded-xl p-4 bg-primary/50">
         <h2 class="mb-2 text-amber-100">方案 A │ 滿版小紋和服</h2>
         <div>
@@ -53,6 +53,13 @@ const covers_b = await Promise.all(plans.map((plan) => loadImages(`plans/${plan.
         <div>
           <span class="text-lg">體驗價</span><span class="ms-1 text-4xl text-red-500 font-bold">$7,500</span>
           <span class="opacity-70 whitespace-nowrap"><del>原價 $8,600</del></span>
+        </div>
+      </div>
+      <div class="border border-[#fff3] rounded-xl p-4 bg-primary/50">
+        <h2 class="mb-2 text-amber-100">方案 C │ 和洋折衷</h2>
+        <div>
+          <span class="text-lg">體驗價</span><span class="ms-1 text-4xl text-red-500 font-bold">$6,888</span>
+          <span class="opacity-70 whitespace-nowrap"><del>原價 $7,600</del></span>
         </div>
       </div>
     </div>

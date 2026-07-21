@@ -15,9 +15,9 @@ const { plan } = Astro.props;
 ---
 
 <Layout title={`和服方案│${plan.title}`}>
+  <PlanTabs slot="subheader" />
   <div slot="subtitle" class="mb-8">方案 {plan.type}</div>
-  <PlanTabs />
-  <main class="pb-8">
+  <main class="py-8">
     <div class="container mb-8">
       <h2 class="mb-6">✿ 尺寸 ✿</h2>
       <div class="mb-8 whitespace-pre">{plan.intro}</div>

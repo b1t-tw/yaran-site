@@ -124,6 +124,7 @@ import { swapBodyElement } from "astro/virtual-modules/transitions-swap-function
     {
       title !== '首頁' && (
         <Header/>
+        <slot name="subheader" />
         <div class="text-center border-b border-[#fff3]">
           <h1 class="py-8">{title}</h1>
           <div class="text-primary-light">
