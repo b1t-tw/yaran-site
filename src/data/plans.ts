@@ -89,6 +89,30 @@ export const plans: Plan[] = [
     type: "C 和洋折衷",
     intro: "衣長：152cm\n袖長：63cm\n適合身高：172cm\n適合臀圍：105cm"
   },
+  {
+    slug: "yukata/1",
+    title: "白底紅花",
+    imageDir: "yukata/白底紅花",
+    type: "D 和服浴衣"
+  },
+  {
+    slug: "yukata/2",
+    title: "藍底白花",
+    imageDir: "yukata/藍底白花",
+    type: "D 和服浴衣"
+  },
+  {
+    slug: "yukata/3",
+    title: "金魚",
+    imageDir: "yukata/金魚",
+    type: "D 和服浴衣"
+  },
+  {
+    slug: "yukata/4",
+    title: "黑底紅花",
+    imageDir: "yukata/黑底紅花",
+    type: "D 和服浴衣"
+  },
 ];
 
 export const getPlan = (slug: string) => plans.find((p) => p.slug === slug);

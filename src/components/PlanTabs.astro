@@ -1,19 +1,44 @@
 ---
 import { plans } from "../data/plans";
 
-const currentPath = Astro.url.pathname;
-const isActive = (slug: string) =>
-  currentPath === `/plans/${slug}` || currentPath === `/plans/${slug}/`;
+const currentPath = Astro.url.pathname.replace(/\/$/, "");
+const currentPlan = plans.find((p) => `/plans/${p.slug}` === currentPath);
+
+// 依 type 分組，組別與組內順序都沿用 plans.ts 的排列
+const groups = plans.reduce<{ type: string; items: typeof plans }[]>((acc, plan) => {
+  const group = acc.find((g) => g.type === plan.type);
+  if (group) group.items.push(plan);
+  else acc.push({ type: plan.type, items: [plan] });
+  return acc;
+}, []);
+
+// 第二層只顯示當前方案所屬的類別
+const activeGroup = groups.find((g) => g.type === currentPlan?.type) ?? groups[0];
 ---
 
-<nav class="border-b border-[#fff3]">
-  <ul class="flex flex-wrap gap-x-4 md:gap-x-6 gap-y-2 justify-center px-4 pt-4 pb-3 font-semibold whitespace-nowrap">
+<nav class="border-b border-[#fff3] px-4 pt-3 pb-3">
+  {/* 第一層：方案類別，點了跳到該類別的第一個款式 */}
+  <ul class="flex flex-wrap gap-x-4 md:gap-x-6 gap-y-1 justify-center text-sm whitespace-nowrap">
     {
-      plans.map((plan) => (
+      groups.map((group) => (
+        <li>
+          <a
+            href={`/plans/${group.items[0].slug}`}
+            class={`transition hover:!opacity-100 ${group === activeGroup ? "text-amber-100 !opacity-100" : "opacity-60"}`}>
+            {group.type}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  {/* 第二層：該類別底下的款式 */}
+  <ul class="flex flex-wrap gap-x-4 md:gap-x-6 gap-y-2 justify-center pt-3 font-semibold whitespace-nowrap">
+    {
+      activeGroup.items.map((plan) => (
         <li>
           <a
             href={`/plans/${plan.slug}`}
-            class={`pb-1 border-b-2 border-transparent hover:border-amber-100 hover:!opacity-100 transition ${isActive(plan.slug) ? "!border-amber-50" : ""}`}>
+            class={`pb-1 border-b-2 border-transparent hover:border-amber-100 hover:!opacity-100 transition ${plan.slug === currentPlan?.slug ? "!border-amber-50" : ""}`}>
             {plan.title}
           </a>
         </li>
