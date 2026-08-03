@@ -23,6 +23,9 @@ const { plan } = Astro.props;
       <div class="mb-8 whitespace-pre">{plan.intro}</div>
       <h2 class="mb-6">✿ 照片集 ✿</h2>
       <PhotoGallery dir={`plans/${plan.imageDir}`} alt={plan.title} objectfit="cover" />
+      <div class="mt-12 text-center">
+        <a class="btn btn-primary" href="https://forms.gle/8vshVBVQCjjBJERa9" target="_blank">立即預約</a>
+      </div>
     </div>
   </main>
 </Layout>
