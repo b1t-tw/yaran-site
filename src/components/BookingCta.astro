@@ -1,0 +1,19 @@
+---
+import { Icon } from "astro-icon/components";
+import type { BookingTarget } from "../lib/booking";
+
+// 頁面內的主要預約區塊。id 給 StickyBookingBar 用來判斷是否已經看到預約入口。
+type Props = BookingTarget;
+
+const { href, title, desc } = Astro.props;
+---
+
+<section
+  id="booking-cta"
+  class="mt-12 rounded-xl border border-accent/25 bg-primary-dark/60 px-6 py-8 text-center">
+  <h2 class="mb-2 text-amber-100">{title}</h2>
+  <p class="mb-6 text-amber-50/80">{desc}</p>
+  <a class="btn btn-cta" href={href} target="_blank" rel="noopener">
+    立即預約 <Icon name="mdi:calendar-check" class="text-2xl" />
+  </a>
+</section>

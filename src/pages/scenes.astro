@@ -2,6 +2,9 @@
 import Layout from "../layouts/Layout.astro";
 import ImageSwiper from "../components/ImageSwiper.astro";
 import PhotoGallery from "../components/PhotoGallery.astro";
+import BookingCta from "../components/BookingCta.astro";
+import StickyBookingBar from "../components/StickyBookingBar.astro";
+import { studioBooking } from "../lib/booking";
 import { Image } from "astro:assets";
 import floorPlan from "../assets/yaran_floor_plan_tp.png";
 ---
@@ -141,6 +144,8 @@ import floorPlan from "../assets/yaran_floor_plan_tp.png";
         <h2 class="mb-8">𖠁 其他場景照片 𖠁</h2>
         <PhotoGallery dir="other" alt="Yaran 野蘭攝影棚其他場景照" />
       </div>
+      <BookingCta {...studioBooking} />
     </div>
+    <StickyBookingBar href={studioBooking.href} />
   </main>
 </Layout>

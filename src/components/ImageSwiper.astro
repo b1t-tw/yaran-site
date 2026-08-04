@@ -30,10 +30,10 @@ const items = await loadGalleryItems(dir);
               alt={`${alt ?? dir} ${i + 1}`}
               format="webp"
               quality={80}
-              width={800}
+              width={1200}
               height={800}
               loading={i === 0 ? "eager" : "lazy"}
-              class="h-full w-full object-contain cursor-zoom-in"
+              class="h-full w-full object-cover cursor-zoom-in"
             />
           </div>
         ))}

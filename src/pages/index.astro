@@ -4,6 +4,7 @@ import Layout from "../layouts/Layout.astro";
 import Header from "../components/Header.astro";
 import EntryPersonnel from "../components/EntryPersonnel.astro";
 import BookingNotice from "../components/BookingNotice.astro";
+import { studioBooking } from "../lib/booking";
 import { Icon } from "astro-icon/components";
 import logoH from "../assets/logo_h_gold.png";
 import logoV from "../assets/logo_v_gold.png";
@@ -98,9 +99,7 @@ const heroImages = [hero1, hero2, hero3, hero4, hero5];
       <h3 class="mb-4 mt-8">預約方式</h3>
       <ul class="mb-2">
         <li>
-          Step1：確認預約時段，並仔細閱讀攝影棚使用規範後，<a
-            href="https://frametime.app/v/yaran-studio"
-            target="_blank">網站填表預約</a>
+          Step1：確認預約時段，並仔細閱讀攝影棚使用規範後，<a href={studioBooking.href} target="_blank">網站填表預約</a>
         </li>
         <li>Step2：一日內支付訂金<a href="/prepaid" target="_blank">（線上金流）</a>，逾時視同取消</li>
         <li>Step3：私訊 FB／IG 提供『預約人姓名』、『預約時間』、『電話』</li>
@@ -120,7 +119,7 @@ const heroImages = [hero1, hero2, hero3, hero4, hero5];
           >
         </p>
         <p class="text-sm opacity-70">※ 感謝「可以澀澀攝影棚」提供表單模板</p>
-        <a href="https://frametime.app/v/yaran-studio" target="_blank" class="btn btn-primary mt-6"
+        <a href={studioBooking.href} target="_blank" class="btn btn-primary mt-6"
           >立即預約 <Icon name="ic:round-menu-book" />
         </a>
       </div>

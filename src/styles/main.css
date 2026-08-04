@@ -4,6 +4,8 @@
   --color-primary-dark: #1E1F21;
   --color-primary: #113831;
   --color-primary-light: #ddd7a5;
+  /* CTA 專用：與 primary-light 同色相但更飽和，才不會跟滿版的米黃文字融在一起 */
+  --color-accent: #ddcc5f;
   --text-base: 1.125rem;
 }
 
@@ -58,11 +60,33 @@
   .card {
     @apply rounded-lg overflow-hidden shadow-md p-4;
   }
+}
+
+/* 按鈕放 components 層，才能在標籤上直接用 Tailwind utility 覆寫個別屬性 */
+@layer components {
   .btn {
-    @apply inline-flex items-center gap-1 px-4 py-2 rounded-lg font-bold transition-colors no-underline;
+    @apply inline-flex items-center justify-center gap-1 px-4 py-2 rounded-lg font-bold transition no-underline;
+    @apply focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-accent;
   }
   .btn-primary {
     @apply bg-primary-light text-primary-dark hover:bg-primary-light/90;
   }
-
+  /* 主要行動按鈕：飽和金底 + 深色字，配上外擴光暈讓它從深綠背景浮起來 */
+  .btn-cta {
+    @apply bg-accent text-primary-dark text-xl px-8 py-4 rounded-xl;
+    box-shadow: 0 10px 30px -12px rgb(221 204 95 / 0.6);
+  }
+  .btn-cta:hover {
+    box-shadow: 0 14px 36px -12px rgb(221 204 95 / 0.75);
+    transform: translateY(-2px);
+  }
+  .btn-cta:active {
+    transform: translateY(0) scale(0.99);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn-cta:hover,
+    .btn-cta:active {
+      transform: none;
+    }
+  }
 }

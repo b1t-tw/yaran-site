@@ -1,0 +1,75 @@
+---
+import { Icon } from "astro-icon/components";
+
+// 常駐預約入口：手機是底部整條，桌機是右下角浮動按鈕。
+// 捲到頁面內的 BookingCta 時自動收起，避免同一畫面出現兩個預約按鈕。
+interface Props {
+  href: string;
+}
+
+const { href } = Astro.props;
+---
+
+<div
+  id="sticky-booking"
+  class="sticky-booking fixed inset-x-0 bottom-0 z-40 border-t border-accent/25 bg-primary-dark/95 px-4 pt-3 backdrop-blur-sm md:inset-x-auto md:right-6 md:bottom-6 md:border-0 md:bg-transparent md:p-0 md:backdrop-blur-none">
+  <a
+    class="btn btn-cta w-full max-md:px-6 max-md:py-2.5 max-md:text-base md:w-auto"
+    href={href}
+    target="_blank"
+    rel="noopener">
+    立即預約 <Icon name="mdi:calendar-check" class="text-xl md:text-2xl" />
+  </a>
+</div>
+
+<style>
+  /* 手機的固定列蓋在文件最底（頁尾之後），空間要留在頁尾內部才不會露出 body 的綠底；
+     只在固定列真的顯示時才留，收起時（頁內 CTA 已在視野內）底部不該空一塊。
+     固定列量到 72px，多留一點才不會跟版權列貼在一起 */
+  @media (max-width: 767.98px) {
+    :global(body:has(#sticky-booking:not(.is-hidden)) footer) {
+      padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+    }
+  }
+
+  .sticky-booking {
+    /* 手機底部要避開 iOS 的 home indicator */
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+  }
+  .sticky-booking.is-hidden {
+    opacity: 0;
+    transform: translateY(120%);
+    pointer-events: none;
+  }
+  @media (min-width: 768px) {
+    .sticky-booking {
+      padding-bottom: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sticky-booking {
+      transition: opacity 0.3s ease;
+    }
+    .sticky-booking.is-hidden {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  const bar = document.getElementById("sticky-booking");
+  const inPageCta = document.getElementById("booking-cta");
+
+  if (bar && inPageCta) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => bar.classList.toggle("is-hidden", entry.isIntersecting));
+      },
+      { threshold: 0.2 },
+    );
+    observer.observe(inPageCta);
+  }
+</script>

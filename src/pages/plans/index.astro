@@ -4,6 +4,9 @@ import { Image } from "astro:assets";
 import { plans } from "../../data/plans";
 import { loadImages } from "../../lib/gallery";
 import { Icon } from "astro-icon/components";
+import BookingCta from "../../components/BookingCta.astro";
+import StickyBookingBar from "../../components/StickyBookingBar.astro";
+import { kimonoBooking } from "../../lib/booking";
 import misora_avatar from "../../assets/misora_avatar.jpg";
 import yamamusume_avatar from "../../assets/yamamusume_avatar.jpg";
 
@@ -139,9 +142,7 @@ const covers_b = await Promise.all(plans.map((plan) => loadImages(`plans/${plan.
         }
       </ol>
     </div>
-    <div class="mt-12">
-      <a class="btn btn-primary" href="https://forms.gle/8vshVBVQCjjBJERa9" target="_blank">立即預約</a>
-    </div>
+    <BookingCta {...kimonoBooking} />
   </div>
   <main class="py-8">
     <div class="container">
@@ -187,5 +188,6 @@ const covers_b = await Promise.all(plans.map((plan) => loadImages(`plans/${plan.
         }
       </div>
     </div>
+    <StickyBookingBar href={kimonoBooking.href} />
   </main>
 </Layout>
