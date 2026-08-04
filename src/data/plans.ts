@@ -93,35 +93,35 @@ export const plans: Plan[] = [
     slug: "yukata/1",
     title: "紅茶花",
     imageDir: "yukata/紅茶花",
-    type: "D 和服浴衣",
+    type: "D 浴衣",
     intro: "衣長：約162cm\n袖長：約49cm\n裄：約67cm\n適合身高：157-167cm\n臀圍：100cm以內"
   },
   {
     slug: "yukata/2",
     title: "小雛菊",
     imageDir: "yukata/小雛菊",
-    type: "D 和服浴衣",
+    type: "D 浴衣",
     intro: "衣長：約162cm\n袖長：約49cm\n裄：約67cm\n適合身高：157-167cm\n臀圍：100cm以內"
   },
   {
     slug: "yukata/3",
     title: "藍金魚",
     imageDir: "yukata/藍金魚",
-    type: "D 和服浴衣",
+    type: "D 浴衣",
     intro: "衣長：約162cm\n袖長：約49cm\n裄：約67cm\n適合身高：157-167cm\n臀圍：100cm以內"
   },
   {
     slug: "yukata/4",
     title: "白茶花",
     imageDir: "yukata/白茶花",
-    type: "D 和服浴衣",
+    type: "D 浴衣",
     intro: "（大尺碼2L～3L)\n長度：163cm\n袖長：49cm\n裄：68cm\n胸圍：93-108cm\n前片寬度：26.5cm\n後片寬度：30cm\n適合身高：約155-165cm\n適合臀圍：103cm以內"
   },
   {
     slug: "yukata/5",
     title: "深藍桔梗",
     imageDir: "yukata/深藍桔梗",
-    type: "D 和服浴衣",
+    type: "D 浴衣",
     intro: "衣長：約162cm\n袖長：約49cm\n裄：約67cm\n適合身高：157-167cm\n臀圍：100cm以內"
   },
 ];
