@@ -190,10 +190,10 @@
 @layer components {
   /* 放在 components layer，讓頁面上的 max-w-* utilities 可覆寫預設欄寬。 */
   .site-container {
-    @apply mx-auto w-full max-w-5xl px-5 md:px-6;
+    @apply mx-auto w-full max-w-5xl px-4 md:px-6;
   }
   .site-container-wide {
-    @apply mx-auto w-full max-w-6xl px-5 md:px-6;
+    @apply mx-auto w-full max-w-6xl px-6;
   }
 
   /* ── Eyebrow：所有主要標題前的微型膠囊標 ────────────── */
