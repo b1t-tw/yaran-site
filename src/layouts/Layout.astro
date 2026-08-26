@@ -1,6 +1,7 @@
 ---
 import '../styles/main.css';
 import { getImage } from 'astro:assets';
+import { ClientRouter } from 'astro:transitions';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import hero1 from '../assets/images/20260515_野蘭空間照_CXL_2164.jpg';
@@ -33,7 +34,9 @@ const patterns = Object.keys(import.meta.glob('/public/patterns/*.png')).map(
     <script is:inline define:vars={{ patterns }}>
       // 每次載入隨機選一張背景圖樣，設定給 body::before 使用
       // 換頁時排除上一張，確保一定會換成不同的圖樣
-      if (patterns.length) {
+      // head 的 inline script 只跑一次，SPA 換頁要靠 astro:after-swap 再挑一次
+      function pickPattern() {
+        if (!patterns.length) return;
         const last = sessionStorage.getItem('background-pattern');
         const candidates = patterns.filter((p) => p !== last);
         const pool = candidates.length ? candidates : patterns;
@@ -44,6 +47,8 @@ const patterns = Object.keys(import.meta.glob('/public/patterns/*.png')).map(
           `url("${pick}")`
         );
       }
+      pickPattern();
+      document.addEventListener('astro:after-swap', pickPattern);
     </script>
     <title>{fullTitle}</title>
     <meta property="og:title" content={fullTitle} />
@@ -124,6 +129,19 @@ const patterns = Object.keys(import.meta.glob('/public/patterns/*.png')).map(
     src="https://www.facebook.com/tr?id=2839746599700251&ev=PageView&noscript=1"
     /></noscript>
     <!-- End Meta Pixel Code -->
+    <!-- SPA 換頁後補送瀏覽事件：gtag config / fbq PageView 只在首次載入時送 -->
+    <script is:inline>
+      document.addEventListener('astro:after-swap', function () {
+        if (window.gtag) {
+          gtag('event', 'page_view', {
+            page_location: window.location.href,
+            page_title: document.title,
+          });
+        }
+        if (window.fbq) fbq('track', 'PageView');
+      });
+    </script>
+    <ClientRouter />
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->
@@ -154,7 +172,8 @@ const patterns = Object.keys(import.meta.glob('/public/patterns/*.png')).map(
     <Footer />
     <script is:inline>
       // 全站捲動進場：只用 IntersectionObserver，不掛 scroll 事件
-      (function () {
+      // astro:page-load 首次載入與每次 SPA 換頁都會觸發
+      document.addEventListener('astro:page-load', function () {
         var els = document.querySelectorAll('.reveal');
         if (!els.length) return;
         if (!('IntersectionObserver' in window)) {
@@ -172,7 +191,7 @@ const patterns = Object.keys(import.meta.glob('/public/patterns/*.png')).map(
           { threshold: 0.1, rootMargin: '0px 0px -6% 0px' }
         );
         els.forEach(function (el) { io.observe(el); });
-      })();
+      });
     </script>
   </body>
 </html>

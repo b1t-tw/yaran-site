@@ -191,11 +191,19 @@ const isActive = (href: string) =>
 </style>
 
 <script>
-  const toggle = document.getElementById("nav-toggle");
-  const overlay = document.getElementById("nav-overlay");
-  const slot = document.getElementById("nav-slot");
+  // module script 只跑一次，綁在 document 上的 keydown 放這裡就不會逐頁累積
+  document.addEventListener("keydown", (e) => {
+    const toggle = document.getElementById("nav-toggle");
+    if (e.key === "Escape" && toggle?.getAttribute("aria-expanded") === "true") toggle.click();
+  });
 
-  if (toggle && overlay && slot) {
+  // 每次換頁 DOM 都是新的，要重新綁
+  document.addEventListener("astro:page-load", () => {
+    const toggle = document.getElementById("nav-toggle");
+    const overlay = document.getElementById("nav-overlay");
+    const slot = document.getElementById("nav-slot");
+    if (!toggle || !overlay || !slot) return;
+
     overlay.addEventListener("transitionend", (event) => {
       if (
         event.target !== overlay ||
@@ -228,8 +236,5 @@ const isActive = (href: string) =>
     overlay.addEventListener("click", (e) => {
       if ((e.target as HTMLElement).closest("a")) setOpen(false);
     });
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") setOpen(false);
-    });
-  }
+  });
 </script>

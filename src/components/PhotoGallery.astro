@@ -69,17 +69,19 @@ const items = await loadGalleryItems(dir);
   import "photoswipe/style.css";
   import { enhanceLightbox } from "../lib/lightbox";
 
-  document.querySelectorAll<HTMLElement>(".photo-gallery").forEach((el) => {
-    // 有任一張帶圖說時，照片不滿版：底部留白放圖說
-    const hasCaptions = el.querySelector("a[data-pswp-caption]") !== null;
+  document.addEventListener("astro:page-load", () => {
+    document.querySelectorAll<HTMLElement>(".photo-gallery").forEach((el) => {
+      // 有任一張帶圖說時，照片不滿版：底部留白放圖說
+      const hasCaptions = el.querySelector("a[data-pswp-caption]") !== null;
 
-    const lightbox = new PhotoSwipeLightbox({
-      gallery: `#${el.id}`,
-      children: "a",
-      pswpModule: () => import("photoswipe"),
-      bgClickAction: "close"
+      const lightbox = new PhotoSwipeLightbox({
+        gallery: `#${el.id}`,
+        children: "a",
+        pswpModule: () => import("photoswipe"),
+        bgClickAction: "close"
+      });
+      enhanceLightbox(lightbox, hasCaptions);
+      lightbox.init();
     });
-    enhanceLightbox(lightbox, hasCaptions);
-    lightbox.init();
   });
 </script>

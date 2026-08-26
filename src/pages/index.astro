@@ -329,36 +329,44 @@ const steps = [
   import "swiper/css";
   import "swiper/css/effect-fade";
 
-  new Swiper(".hero-swiper", {
-    modules: [Autoplay, EffectFade],
-    effect: "fade",
-    fadeEffect: { crossFade: true },
-    loop: true,
-    speed: 4000,
-    allowTouchMove: false,
-    autoplay: {
-      delay: 100,
-      disableOnInteraction: false,
-    },
-  });
+  document.addEventListener("astro:page-load", () => {
+    const heroEl = document.querySelector<HTMLElement>(".hero-swiper");
+    if (!heroEl) return;
 
-  const logo = document.getElementById("logo");
-  const tagline = document.getElementById("hero-tagline");
-  const scrollIcon = document.getElementById("scroll-icon");
-
-  if (logo && tagline && scrollIcon) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          logo.classList.add("animate");
-          tagline.classList.add("animate");
-          setTimeout(() => scrollIcon.classList.add("show"), 1600);
-          observer.unobserve(entry.target);
-        });
+    const hero = new Swiper(heroEl, {
+      modules: [Autoplay, EffectFade],
+      effect: "fade",
+      fadeEffect: { crossFade: true },
+      loop: true,
+      speed: 4000,
+      allowTouchMove: false,
+      autoplay: {
+        delay: 100,
+        disableOnInteraction: false,
       },
-      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" },
-    );
-    observer.observe(logo);
-  }
+    });
+
+    // 換頁後 autoplay 的計時器還會跑在被換掉的 DOM 上，要收掉
+    document.addEventListener("astro:before-swap", () => hero.destroy(), { once: true });
+
+    const logo = document.getElementById("logo");
+    const tagline = document.getElementById("hero-tagline");
+    const scrollIcon = document.getElementById("scroll-icon");
+
+    if (logo && tagline && scrollIcon) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            logo.classList.add("animate");
+            tagline.classList.add("animate");
+            setTimeout(() => scrollIcon.classList.add("show"), 1600);
+            observer.unobserve(entry.target);
+          });
+        },
+        { threshold: 0.1, rootMargin: "0px 0px -50px 0px" },
+      );
+      observer.observe(logo);
+    }
+  });
 </script>

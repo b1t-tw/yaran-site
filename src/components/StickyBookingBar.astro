@@ -60,10 +60,11 @@ const { href } = Astro.props;
 </style>
 
 <script>
-  const bar = document.getElementById("sticky-booking");
-  const inPageCta = document.getElementById("booking-cta");
+  document.addEventListener("astro:page-load", () => {
+    const bar = document.getElementById("sticky-booking");
+    const inPageCta = document.getElementById("booking-cta");
+    if (!bar || !inPageCta) return;
 
-  if (bar && inPageCta) {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => bar.classList.toggle("is-hidden", entry.isIntersecting));
@@ -71,5 +72,5 @@ const { href } = Astro.props;
       { threshold: 0.2 },
     );
     observer.observe(inPageCta);
-  }
+  });
 </script>

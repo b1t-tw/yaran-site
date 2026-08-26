@@ -52,47 +52,52 @@ const items = await loadGalleryItems(dir);
   import "photoswipe/style.css";
   import { enhanceLightbox } from "../lib/lightbox";
 
-  // 頁面上每個 .gallery-swiper 各自初始化（支援多個 instance）
-  document.querySelectorAll<HTMLElement>(".gallery-swiper").forEach((el) => {
-    const swiper = new Swiper(el, {
-      modules: [Autoplay, Pagination, Keyboard, A11y],
-      loop: true,
-      spaceBetween: 16,
-      autoplay: {
-        delay: 3000,
-        disableOnInteraction: false,
-      },
-      keyboard: { enabled: true },
-      pagination: { el: el.querySelector(".swiper-pagination"), clickable: true },
+  document.addEventListener("astro:page-load", () => {
+    // 頁面上每個 .gallery-swiper 各自初始化（支援多個 instance）
+    document.querySelectorAll<HTMLElement>(".gallery-swiper").forEach((el) => {
+      const swiper = new Swiper(el, {
+        modules: [Autoplay, Pagination, Keyboard, A11y],
+        loop: true,
+        spaceBetween: 16,
+        autoplay: {
+          delay: 3000,
+          disableOnInteraction: false,
+        },
+        keyboard: { enabled: true },
+        pagination: { el: el.querySelector(".swiper-pagination"), clickable: true },
+      });
+
+      // 依原始 slide（排除 loop 複製）順序建立燈箱資料
+      const dataSource = Array.from(
+        el.querySelectorAll<HTMLElement>(".swiper-slide:not(.swiper-slide-duplicate)"),
+      ).map((slide) => ({
+        src: slide.dataset.pswpSrc!,
+        width: Number(slide.dataset.pswpWidth),
+        height: Number(slide.dataset.pswpHeight),
+      }));
+
+      const lightbox = new PhotoSwipeLightbox({
+        dataSource,
+        pswpModule: () => import("photoswipe"),
+      });
+      enhanceLightbox(lightbox);
+      lightbox.init();
+
+      // 點擊（非拖曳）開啟燈箱；用 realIndex 對應原始圖片順序
+      swiper.on("click", () => {
+        const slide = swiper.clickedSlide;
+        if (!slide) return;
+        const realIndex = Number(slide.getAttribute("data-swiper-slide-index") ?? swiper.clickedIndex);
+        lightbox.loadAndOpen(realIndex);
+      });
+
+      // 燈箱開啟時暫停自動輪播，關閉後恢復
+      lightbox.on("beforeOpen", () => swiper.autoplay.stop());
+      lightbox.on("close", () => swiper.autoplay.start());
+
+      // 換頁後 autoplay 的計時器還會跑在被換掉的 DOM 上，要收掉
+      document.addEventListener("astro:before-swap", () => swiper.destroy(), { once: true });
     });
-
-    // 依原始 slide（排除 loop 複製）順序建立燈箱資料
-    const dataSource = Array.from(
-      el.querySelectorAll<HTMLElement>(".swiper-slide:not(.swiper-slide-duplicate)"),
-    ).map((slide) => ({
-      src: slide.dataset.pswpSrc!,
-      width: Number(slide.dataset.pswpWidth),
-      height: Number(slide.dataset.pswpHeight),
-    }));
-
-    const lightbox = new PhotoSwipeLightbox({
-      dataSource,
-      pswpModule: () => import("photoswipe"),
-    });
-    enhanceLightbox(lightbox);
-    lightbox.init();
-
-    // 點擊（非拖曳）開啟燈箱；用 realIndex 對應原始圖片順序
-    swiper.on("click", () => {
-      const slide = swiper.clickedSlide;
-      if (!slide) return;
-      const realIndex = Number(slide.getAttribute("data-swiper-slide-index") ?? swiper.clickedIndex);
-      lightbox.loadAndOpen(realIndex);
-    });
-
-    // 燈箱開啟時暫停自動輪播，關閉後恢復
-    lightbox.on("beforeOpen", () => swiper.autoplay.stop());
-    lightbox.on("close", () => swiper.autoplay.start());
   });
 </script>
 

@@ -221,7 +221,9 @@ const scenes = [
   import "photoswipe/style.css";
   import { enhanceLightbox } from "../lib/lightbox";
 
-  if (document.getElementById("floor-plan")) {
+  document.addEventListener("astro:page-load", () => {
+    if (!document.getElementById("floor-plan")) return;
+
     const lightbox = new PhotoSwipeLightbox({
       gallery: "#floor-plan",
       children: "a",
@@ -235,5 +237,5 @@ const scenes = [
     });
     enhanceLightbox(lightbox);
     lightbox.init();
-  }
+  });
 </script>
