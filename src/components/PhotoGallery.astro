@@ -20,7 +20,7 @@ const items = await loadGalleryItems(dir);
 
 {
   items.length > 0 && (
-    <div id={`gallery-${slug.replace(/\//g, "-")}`} class="photo-gallery grid grid-cols-2 md:grid-cols-3 gap-4">
+    <div id={`gallery-${slug.replace(/\//g, "-")}`} class="photo-gallery grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
       {items.map((item, i) => (
         <a
           href={item.full.src}
@@ -29,7 +29,7 @@ const items = await loadGalleryItems(dir);
           data-pswp-caption={captions?.[i]}
           target="_blank"
           rel="noreferrer"
-          class="block overflow-hidden rounded-lg !opacity-100">
+          class="core-media gallery-tile no-rule block !opacity-100">
           <Image
             src={item.thumb}
             alt={`${alt ?? dir} ${i + 1}`}
@@ -38,13 +38,31 @@ const items = await loadGalleryItems(dir);
             width={800}
             height={800}
             loading={i < 3 ? "eager" : "lazy"}
-            class={`w-full aspect-square drop-shadow-lg bg-white transition duration-300 hover:scale-105 ${objectfit ? `object-${objectfit}` : "object-cover"}`}
+            class={`aspect-square w-full ${objectfit ? `object-${objectfit}` : "object-cover"}`}
           />
         </a>
       ))}
     </div>
   )
 }
+
+<style>
+  /* 圖磚：髮絲外框 + 內緣高光，hover 時圖片緩慢推近，外框不動 */
+  .gallery-tile {
+    border: 1px solid var(--color-hairline);
+    transition: border-color 0.7s var(--ease-editorial);
+  }
+  .gallery-tile:hover { border-color: var(--color-hairline-strong); }
+  .gallery-tile :global(img) {
+    transition: transform 1s var(--ease-editorial), opacity 0.7s var(--ease-editorial);
+  }
+  .gallery-tile:hover :global(img) { transform: scale(1.05); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gallery-tile :global(img) { transition: none; }
+    .gallery-tile:hover :global(img) { transform: none; }
+  }
+</style>
 
 <script>
   import PhotoSwipeLightbox from "photoswipe/lightbox";

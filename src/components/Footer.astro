@@ -1,33 +1,129 @@
 ---
 import { Icon } from "astro-icon/components";
 import { studioBooking } from "../lib/booking";
+import LogoSq from "../assets/logo_sq_black.svg";
 ---
 
-<footer class="bg-primary-dark text-primary-light">
-  <div class="container pt-16">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div>
-        <h3 class="mb-4">YARAN 野蘭攝影棚</h3>
-        <div class="grid grid-cols-[1.5rem_1fr] items-center gap-2">
-          <Icon name="ic:baseline-location-on" /><span><a href="https://maps.app.goo.gl/uNDP58Zto9S3bJAFA" target="_blank">臺北市南港區忠孝東路六段81巷4號2樓</a></span>
-          <Icon name="ic:mail" /><span><a href="mailto:info@yaran.studio">info@yaran.studio</a></span>
+<footer class="relative mt-8 bg-primary-dark text-cream">
+  {/* 頁尾上緣用漸層髮絲收邊，不用實心邊框 */}
+  <div class="h-px bg-gradient-to-r from-transparent via-hairline-strong to-transparent"></div>
+
+  <div class="site-container-wide pt-20 pb-10 md:pt-28">
+    {/* logo 靠左、導覽靠右，中間欄吃掉剩餘寬度，三塊才不會擠在左半邊留一大片空白 */}
+    <div class="grid gap-12 md:grid-cols-[1fr_auto_auto] md:gap-x-20">
+      <div class="reveal">
+        <a href="/" class="footer-logo block w-max" aria-label="Yaran 野蘭攝影棚">
+          <LogoSq class="w-auto h-32 md:h-48" role="img" aria-label="Yaran 野蘭攝影棚" />
+        </a>
+      </div>
+
+      <div class="reveal" style="--reveal-delay:100ms">
+        <span class="eyebrow">Contact</span>
+        <div class="mt-6 flex flex-col gap-3 text-cream/75">
+          <a
+            href="https://maps.app.goo.gl/uNDP58Zto9S3bJAFA"
+            target="_blank"
+            class="flex items-start gap-3 hover:text-primary-light">
+            <Icon name="ic:baseline-location-on" class="mt-1.5 flex-none text-primary-light/70" />
+            <span>臺北市南港區忠孝東路六段81巷4號2樓</span>
+          </a>
+          <a href="mailto:info@yaran.studio" class="flex items-start gap-3 hover:text-primary-light">
+            <Icon name="ic:mail" class="mt-1.5 flex-none text-primary-light/70" />
+            <span>info@yaran.studio</span>
+          </a>
         </div>
       </div>
-      <div class="md:ms-auto md:text-end">
-        <h3 class="mb-4">關於</h3>
-        <div class="flex flex-col gap-2">
-          <a href="/rules">租棚須知</a>
-          <a href="/scenes">棚景介紹</a>
-          <a href={studioBooking.href} target="_blank">立即預約</a>
+
+      <div class="reveal" style="--reveal-delay:200ms">
+        <span class="eyebrow">Navigate</span>
+        <div class="mt-6 flex flex-col gap-3 text-cream/75">
+          <a href="/rules" class="footer-link">租棚須知</a>
+          <a href="/scenes" class="footer-link">棚景介紹</a>
+          <a href="/plans" class="footer-link">和服方案</a>
+          <a href={studioBooking.href} target="_blank" class="footer-link">立即預約</a>
         </div>
       </div>
     </div>
-    <div class="flex items-center max-md:justify-center gap-1 mt-8 mb-4">
-      <a href="https://www.instagram.com/yaran.studio_tw" target="_blank">
-        <Icon name="ri:instagram-line" size={30} /></a
-      >
-      <a href="https://www.facebook.com/yaran.studio.tw" target="_blank"> <Icon name="ri:facebook-fill" size={32} /></a>
+
+    <div class="mt-16 h-px bg-hairline"></div>
+
+    <div class="flex flex-col items-center gap-6 pt-8 md:flex-row md:justify-between">
+      <div class="flex items-center gap-2">
+        <a
+          href="https://www.instagram.com/yaran.studio_tw"
+          target="_blank"
+          aria-label="Instagram"
+          class="social-dot">
+          <Icon name="ri:instagram-line" size={19} />
+        </a>
+        <a
+          href="https://www.facebook.com/yaran.studio.tw"
+          target="_blank"
+          aria-label="Facebook"
+          class="social-dot">
+          <Icon name="ri:facebook-fill" size={19} />
+        </a>
+      </div>
+      <div class="numeral text-[10px] uppercase tracking-[0.22em] text-cream/35">
+        &copy; 2026 Yaran Studio · All rights reserved
+      </div>
     </div>
-    <div class="text-center text-sm opacity-70 mt-6 pb-1">&copy; 2026 YARAN Studio. All rights reserved.</div>
   </div>
 </footer>
+
+<style>
+  /* logo 的路徑用 fill:currentColor，換色只要改 color */
+  .footer-logo {
+    color: var(--color-primary-light);
+    transition: color 0.6s var(--ease-editorial);
+  }
+  .footer-logo:hover { color: var(--color-accent); }
+
+  .footer-link {
+    position: relative;
+    width: max-content;
+    transition: color 0.6s var(--ease-editorial);
+  }
+  /* 底線從左側長出來，而不是整條直接出現 */
+  .footer-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.2rem;
+    width: 100%;
+    height: 1px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s var(--ease-editorial);
+  }
+  .footer-link:hover {
+    color: var(--color-primary-light);
+    opacity: 1;
+  }
+  .footer-link:hover::after { transform: scaleX(1); }
+
+  .social-dot {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    border: 1px solid var(--color-hairline);
+    color: var(--color-primary-light);
+    transition:
+      background-color 0.6s var(--ease-editorial),
+      border-color 0.6s var(--ease-editorial),
+      transform 0.6s var(--ease-editorial);
+  }
+  .social-dot:hover {
+    background: rgb(247 242 228 / 0.07);
+    border-color: var(--color-hairline-strong);
+    transform: translateY(-2px);
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .social-dot:hover { transform: none; }
+  }
+</style>

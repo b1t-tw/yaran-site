@@ -17,7 +17,7 @@ const items = await loadGalleryItems(dir);
 
 {
   items.length > 0 && (
-    <div class:list={["gallery-swiper swiper", className]}>
+    <div class:list={["core-media gallery-swiper swiper", className]}>
       <div class="swiper-wrapper">
         {items.map((item, i) => (
           <div
@@ -99,10 +99,14 @@ const items = await loadGalleryItems(dir);
 <style>
   .gallery-swiper {
     width: 100%;
+    /* 防守：即使外層忘了 min-w-0，也不讓 slider 撐出容器 */
+    min-width: 0;
+    max-width: 100%;
     aspect-ratio: 3 / 2;
-    border-radius: 0.5rem;
-    overflow: hidden;
-    --swiper-theme-color: rgba(255, 255, 255, 0.8);
-    --swiper-pagination-bullet-inactive-color: rgba(255, 255, 255, 1);
+    --swiper-theme-color: var(--color-accent);
+    --swiper-pagination-bullet-inactive-color: rgb(247 242 228 / 0.9);
+    --swiper-pagination-bullet-inactive-opacity: 0.35;
+    --swiper-pagination-bullet-size: 6px;
+    --swiper-pagination-bullet-horizontal-gap: 5px;
   }
 </style>

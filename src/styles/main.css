@@ -1,19 +1,49 @@
 @import "tailwindcss";
 
+/* ══════════════════════════════════════════════════════════════
+   YARAN — Editorial Luxury 設計系統
+   深墨綠紙感底 × 高對比襯線 × 雙層卡殼 × 慢速緩動
+   ══════════════════════════════════════════════════════════════ */
+
 @theme {
-  --color-primary-dark: #1E1F21;
-  --color-primary: #113831;
+  /* ── 地色：由淺到深，卡片要浮起來就靠這三階 ── */
+  --color-primary: #113831;        /* 品牌綠，body 底 */
+  --color-primary-deep: #0c2a24;   /* 外殼托盤（shell） */
+  --color-primary-dark: #081c18;   /* 頁尾、覆蓋層 */
+
   --color-primary-light: #ddd7a5;
   /* CTA 專用：與 primary-light 同色相但更飽和，才不會跟滿版的米黃文字融在一起 */
   --color-accent: #ddcc5f;
+  --color-cream: #f7f2e4;
+
+  /* ── 髮絲線：一律走透明疊色，不用實心灰邊 ── */
+  --color-hairline: rgb(247 242 228 / 0.11);
+  --color-hairline-strong: rgb(247 242 228 / 0.2);
+
+  /* ── 字體 ── */
+  --font-display: "Cormorant Infant", "Chiron Sung HK", ui-serif, serif;
+  --font-eyebrow: "Cinzel", "Chiron Sung HK", ui-serif, serif;
+
   --text-base: 1.125rem;
+
+  /* ── 緩動：沒有 linear / ease-in-out ── */
+  --ease-editorial: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* ── 圓角：外殼與內核同心 ── */
+  --radius-shell: 1.75rem;
+  --radius-core: 1.3rem;
 }
 
 @layer base {
   body {
-    font-family: "Cormorant Infant", "Chiron Sung HK", sans-serif;
-    @apply bg-primary text-amber-50 text-base leading-relaxed m-0;
+    font-family: var(--font-display);
+    @apply bg-primary text-cream text-base m-0;
     font-weight: 400;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+
+    /* 紙紋顆粒：固定層、不吃事件，不會跟著捲動重繪 */
     &::before {
       @apply fixed inset-0 bg-primary;
       content: "";
@@ -26,67 +56,293 @@
       pointer-events: none;
     }
   }
-  h1 { @apply text-4xl font-extrabold; }
-  h2 { @apply text-2xl font-extrabold; }
-  h3 { @apply text-xl font-extrabold; }
-  h4 { @apply text-lg font-extrabold; }
-  h5 { @apply text-base font-extrabold; }
-  p {
-    &:not(:last-child) {
-      @apply mb-2;
-    }
+
+  /* 標題走「大字級 + 輕字重 + 緊字距」，而不是靠 extrabold 撐 */
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-display);
+    text-wrap: balance;
   }
-  li {
-    @apply mb-1;
+  h1 {
+    font-size: clamp(2.6rem, 6.5vw, 4.5rem);
+    letter-spacing: -0.015em;
+    font-weight: 400;
+    line-height: 1.08;
   }
+  h2 {
+    font-size: clamp(1.85rem, 3.6vw, 2.75rem);
+    letter-spacing: -0.01em;
+    font-weight: 400;
+    line-height: 1.2;
+  }
+  h3 {
+    font-size: clamp(1.3rem, 2.2vw, 1.65rem);
+    font-weight: 500;
+    letter-spacing: 0.005em;
+    line-height: 1.35;
+  }
+  h4 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  h5 {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  p:not(:last-child) { @apply mb-3; }
+  li { @apply mb-1.5; }
+  /* 導覽列的 li 不吃內文行距，否則 flex 置中會被 margin 推歪 */
+  nav li { @apply mb-0; }
+
   a[href] {
-    @apply transition-opacity duration-200 hover:opacity-80;
+    transition: opacity 0.5s var(--ease-editorial), color 0.5s var(--ease-editorial);
+    @apply hover:opacity-80;
   }
-  main a[href] {
-    @apply underline hover:opacity-75;
+  /* 內文連結：金色細底線 + 拉開距離，不要瀏覽器預設那條 */
+  main a[href]:not(.btn):not(.no-rule) {
+    text-decoration: underline;
+    text-decoration-color: rgb(221 204 95 / 0.45);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.28em;
+    transition: text-decoration-color 0.5s var(--ease-editorial), color 0.5s var(--ease-editorial);
   }
+  main a[href]:not(.btn):not(.no-rule):hover {
+    text-decoration-color: var(--color-accent);
+    color: var(--color-primary-light);
+    opacity: 1;
+  }
+
   strong {
-    @apply font-bold text-primary-light;
+    font-weight: 600;
+    @apply text-primary-light;
   }
+
+  del { text-decoration-thickness: 1px; }
+
+  /* 分隔線：漸層髮絲 + 中央菱形飾記 */
   hr {
-    @apply border-t-1 border-[#fff3] my-8;
+    border: 0;
+    height: 1px;
+    position: relative;
+    @apply my-16 md:my-28;
+    background: linear-gradient(90deg, transparent, var(--color-hairline-strong) 50%, transparent);
+    overflow: visible;
+  }
+  hr::after {
+    content: "✦";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0 0.9rem;
+    font-size: 0.6rem;
+    line-height: 1;
+    color: var(--color-accent);
+    opacity: 0.75;
+  }
+
+  ::selection {
+    background: rgb(221 204 95 / 0.28);
+    color: var(--color-cream);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+    border-radius: 4px;
   }
 }
 
 @layer utilities {
-  .container {
-    @apply mx-auto lg:max-w-5xl px-6;
+  /* 版面呼吸：所有段落區塊的預設節奏 */
+  .section-tight {
+    @apply py-16 md:py-24;
   }
-  .card {
-    @apply rounded-lg overflow-hidden shadow-md p-4;
+
+  /* 條列：把預設 disc 換成金色細記號 */
+  .list-editorial {
+    @apply pl-0 list-none;
+  }
+  .list-editorial > li {
+    @apply relative pl-6;
+  }
+  .list-editorial > li::before {
+    content: "";
+    position: absolute;
+    left: 0.15rem;
+    top: 0.85em;
+    width: 0.3rem;
+    height: 1px;
+    background: var(--color-accent);
+    opacity: 0.7;
+  }
+
+  /* 編號步驟用的細數字 */
+  .numeral {
+    font-family: var(--font-eyebrow);
+    letter-spacing: 0.12em;
+    font-weight: 400;
   }
 }
 
-/* 按鈕放 components 層，才能在標籤上直接用 Tailwind utility 覆寫個別屬性 */
 @layer components {
+  /* 放在 components layer，讓頁面上的 max-w-* utilities 可覆寫預設欄寬。 */
+  .site-container {
+    @apply mx-auto w-full max-w-5xl px-5 md:px-6;
+  }
+  .site-container-wide {
+    @apply mx-auto w-full max-w-6xl px-5 md:px-6;
+  }
+
+  /* ── Eyebrow：所有主要標題前的微型膠囊標 ────────────── */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full px-3 py-1 uppercase;
+    /* 當 eyebrow 是 grid/flex 的直接子項時，預設會被拉滿整欄，這兩行讓它永遠只包住文字 */
+    width: max-content;
+    justify-self: start;
+    max-width: 100%;
+    font-family: var(--font-eyebrow);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    line-height: 1.6;
+    color: var(--color-primary-light);
+    border: 1px solid var(--color-hairline);
+    background: rgb(247 242 228 / 0.035);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 0.25rem;
+    height: 0.25rem;
+    border-radius: 9999px;
+    background: var(--color-accent);
+    flex: none;
+  }
+
+  /* ── 雙層卡殼（Doppelrand）：托盤 + 內核 ─────────────── */
+  .shell {
+    border-radius: var(--radius-shell);
+    padding: 0.5rem;
+    background: rgb(247 242 228 / 0.035);
+    border: 1px solid var(--color-hairline);
+    transition: border-color 0.7s var(--ease-editorial), background-color 0.7s var(--ease-editorial);
+  }
+  .shell:hover { border-color: var(--color-hairline-strong); }
+
+  .core {
+    border-radius: var(--radius-core);
+    /* 平塗、半透明：不做漸層，讓底層紙紋照樣透上來 */
+    background: rgb(247 242 228 / 0.05);
+    box-shadow: inset 0 1px 0 rgb(247 242 228 / 0.09);
+    overflow: hidden;
+  }
+  /* 放圖用的內核：不要漸層，只留裁切與內光 */
+  .core-media {
+    border-radius: var(--radius-core);
+    box-shadow: inset 0 1px 0 rgb(247 242 228 / 0.12);
+    overflow: hidden;
+    background: var(--color-primary-deep);
+  }
+
+  /* ── 按鈕：膠囊 + 內嵌圓形圖示（button-in-button）───── */
   .btn {
-    @apply inline-flex items-center justify-center gap-1 px-4 py-2 rounded-lg font-bold transition no-underline;
-    @apply focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-accent;
+    @apply inline-flex items-center justify-center gap-3 no-underline;
+    padding: 0.7rem 1.6rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    line-height: 1.4;
+    transition:
+      transform 0.6s var(--ease-editorial),
+      background-color 0.6s var(--ease-editorial),
+      box-shadow 0.6s var(--ease-editorial),
+      border-color 0.6s var(--ease-editorial),
+      color 0.6s var(--ease-editorial);
   }
-  .btn-primary {
-    @apply bg-primary-light text-primary-dark hover:bg-primary-light/90;
+  /* 含圖示的按鈕將文字與圖示視為一組，左右採對稱內距。 */
+  .btn:has(.btn-icon) { padding-inline: 1.25rem; }
+  .btn:active { transform: scale(0.98); }
+
+  .btn-icon {
+    @apply grid place-items-center flex-none;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 9999px;
+    background: rgb(8 28 24 / 0.12);
+    transition:
+      transform 0.6s var(--ease-editorial),
+      background-color 0.6s var(--ease-editorial);
   }
+  .btn:hover .btn-icon {
+    transform: translate(0.2rem, -1px) scale(1.06);
+    background: rgb(8 28 24 / 0.2);
+  }
+
   /* 主要行動按鈕：飽和金底 + 深色字，配上外擴光暈讓它從深綠背景浮起來 */
   .btn-cta {
-    @apply bg-accent text-primary-dark text-xl px-8 py-4 rounded-xl;
-    box-shadow: 0 10px 30px -12px rgb(221 204 95 / 0.6);
+    background: var(--color-accent);
+    color: var(--color-primary-dark);
+    font-size: 1.15rem;
+    padding: 0.9rem 2rem;
+    box-shadow: 0 18px 45px -20px rgb(221 204 95 / 0.65);
+  }
+  .btn-label {
+    white-space: nowrap;
+    line-height: 1;
+    transform: translateY(0.06em);
   }
   .btn-cta:hover {
-    box-shadow: 0 14px 36px -12px rgb(221 204 95 / 0.75);
+    box-shadow: 0 24px 55px -20px rgb(221 204 95 / 0.8);
     transform: translateY(-2px);
+    opacity: 1;
   }
-  .btn-cta:active {
-    transform: translateY(0) scale(0.99);
+  .btn-cta:active { transform: translateY(0) scale(0.98); }
+
+  /* 次要按鈕：只有髮絲邊的幽靈膠囊 */
+  .btn-ghost {
+    border: 1px solid var(--color-hairline-strong);
+    color: var(--color-cream);
+    background: rgb(247 242 228 / 0.03);
   }
-  @media (prefers-reduced-motion: reduce) {
-    .btn-cta:hover,
-    .btn-cta:active {
-      transform: none;
-    }
+  .btn-ghost:hover {
+    background: rgb(247 242 228 / 0.08);
+    border-color: var(--color-accent);
+    opacity: 1;
+  }
+
+  /* ── 捲動進場：從模糊、下沉處浮上來 ─────────────────── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(2.5rem);
+    filter: blur(8px);
+    transition:
+      opacity 0.9s var(--ease-editorial),
+      transform 0.9s var(--ease-editorial),
+      filter 0.9s var(--ease-editorial);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .reveal.is-in {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+  .btn,
+  .btn:hover,
+  .btn:active,
+  .btn-cta:hover,
+  .btn-cta:active,
+  .btn:hover .btn-icon {
+    transform: none;
   }
 }

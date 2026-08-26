@@ -10,184 +10,334 @@ import { kimonoBooking } from "../../lib/booking";
 import misora_avatar from "../../assets/misora_avatar.jpg";
 import yamamusume_avatar from "../../assets/yamamusume_avatar.jpg";
 
+const partners = [
+  { name: "御空和服", href: "https://www.instagram.com/misora_kimono/", avatar: misora_avatar },
+  { name: "藍鵲和洋", href: "https://www.instagram.com/yamamusume_kimono/", avatar: yamamusume_avatar },
+];
+
+// 價目
+const priceCards = [
+  { key: "A", title: "滿版小紋和服", price: "6,999", was: "7,950" },
+  { key: "B", title: "精緻訪問着", price: "7,500", was: "8,600" },
+  { key: "C", title: "和洋折衷", price: "6,888", was: "7,600" },
+  { key: "D", title: "浴衣", price: "6,888", was: "7,600" },
+];
+
+const includes = [
+  {
+    icon: "mdi:scissors",
+    label: "Styling",
+    title: "精緻造型",
+    desc: "包含「完整妝髮設計」與「專業和服着付」，含免費租借和服及配件。",
+  },
+  {
+    icon: "mdi:camera",
+    label: "Photography",
+    title: "專業攝影",
+    desc: "提供 6 張精修照片（可依需求加價增修）並全數贈送所有調色毛片。",
+  },
+  {
+    icon: "mdi:gift",
+    label: "Keepsake",
+    title: "專屬紀念",
+    desc: "贈送一張實體照片，或可選擇體驗獨特的現場藍晒製作，帶走充滿手作溫度的顯影回憶。",
+  },
+];
+
 // 和服預約流程，依序顯示
 const bookingSteps = [
   {
     icon: "mdi:calendar-check",
     title: "完成預約・支付訂金",
-    desc: "填寫表單挑選喜歡的款式，支付訂金後即完成預約。"
+    desc: "填寫表單挑選喜歡的款式，支付訂金後即完成預約。",
   },
   {
     icon: "mdi:account-group",
     title: "開設專屬討論群組",
-    desc: "我們會為您開一個專屬群組，着付師與造型師一同跟進後續細節。"
+    desc: "我們會為您開一個專屬群組，着付師與造型師一同跟進後續細節。",
   },
   {
     icon: "mdi:comment-text-multiple",
     title: "討論細節與妝髮",
-    desc: "針對和服細節、素顏狀態與髮長討論，為您量身規劃當日造型。"
+    desc: "針對和服細節、素顏狀態與髮長討論，為您量身規劃當日造型。",
   },
   {
     icon: "mdi:package-variant-closed",
     title: "配件搭配與備品打包",
-    desc: "着付師依討論結果挑選專屬配件、完成收納，當日直接為您著付。"
+    desc: "着付師依討論結果挑選專屬配件、完成收納，當日直接為您著付。",
   },
   {
     icon: "mdi:camera",
     title: "拍攝當日",
-    desc: "着付師與造型師會提早到野蘭備妥，您只要準時抵達即可。"
-  }
+    desc: "着付師與造型師會提早到野蘭備妥，您只要準時抵達即可。",
+  },
 ];
 
-// 取每個方案資料夾的第一張圖當封面
+// 取每個方案資料夾的前兩張圖：第一張當封面，第二張作 hover 切換
 const covers = await Promise.all(plans.map((plan) => loadImages(`plans/${plan.imageDir}`).then((imgs) => imgs[0])));
 const covers_b = await Promise.all(plans.map((plan) => loadImages(`plans/${plan.imageDir}`).then((imgs) => imgs[1])));
 ---
 
-<Layout title="和服方案">
-  <div class="mb-8 container" slot="subtitle">
-    <div class="mb-8">
-      <p>野蘭攝影棚 x 御空和服 x 藍鵲和洋</p>
-      <div class="flex items-center justify-center gap-8 my-8">
-        <a href="https://www.instagram.com/misora_kimono/" title="御空和服 IG" target="_blank" class="block">
-          <Image
-            src={misora_avatar}
-            format="webp"
-            quality={85}
-            alt="御空和服"
-            width={200}
-            class="rounded-full w-24 h-24 object-cover"
-          />
-        </a>
-        <a href="https://www.instagram.com/yamamusume_kimono/" title="藍鵲和洋 IG" target="_blank" class="block">
-          <Image
-            src={yamamusume_avatar}
-            format="webp"
-            quality={85}
-            alt="藍鵲和洋"
-            width={200}
-            class="rounded-full w-24 h-24 object-cover"
-          />
-        </a>
-      </div>
+<Layout title="和服方案" eyebrow="Kimono">
+  <div class="site-container mb-16" slot="subtitle">
+    <p class="numeral mb-0 text-xs uppercase tracking-[0.2em] text-cream/50">
+      野蘭攝影棚 <span class="text-accent">×</span> 御空和服 <span class="text-accent">×</span> 藍鵲和洋
+    </p>
+    <div class="mt-8 flex items-center justify-center gap-6">
+      {
+        partners.map((p) => (
+          <a href={p.href} title={`${p.name} IG`} target="_blank" class="partner no-rule block">
+            <Image
+              src={p.avatar}
+              format="webp"
+              quality={85}
+              alt={p.name}
+              width={200}
+              class="h-20 w-20 rounded-full object-cover md:h-24 md:w-24"
+            />
+          </a>
+        ))
+      }
     </div>
-    <div class="mb-8 grid md:grid-cols-2 gap-8 text-start text-amber-50">
-      <div class="border border-[#fff3] rounded-xl p-4 bg-primary/50">
-        <h2 class="mb-2 text-amber-100">方案 A │ 滿版小紋和服</h2>
-        <div>
-          <span class="text-lg">體驗價</span><span class="ms-1 text-4xl text-red-500 font-bold">$6,999</span>
-          <span class="opacity-70 whitespace-nowrap"><del>原價 $7,950</del></span>
-        </div>
-      </div>
-      <div class="border border-[#fff3] rounded-xl p-4 bg-primary/50">
-        <h2 class="mb-2 text-amber-100">方案 B │ 精緻訪問着</h2>
-        <div>
-          <span class="text-lg">體驗價</span><span class="ms-1 text-4xl text-red-500 font-bold">$7,500</span>
-          <span class="opacity-70 whitespace-nowrap"><del>原價 $8,600</del></span>
-        </div>
-      </div>
-      <div class="border border-[#fff3] rounded-xl p-4 bg-primary/50">
-        <h2 class="mb-2 text-amber-100">方案 C │ 和洋折衷</h2>
-        <div>
-          <span class="text-lg">體驗價</span><span class="ms-1 text-4xl text-red-500 font-bold">$6,888</span>
-          <span class="opacity-70 whitespace-nowrap"><del>原價 $7,600</del></span>
-        </div>
-      </div>
-      <div class="border border-[#fff3] rounded-xl p-4 bg-primary/50">
-        <h2 class="mb-2 text-amber-100">方案 D │ 浴衣</h2>
-        <div>
-          <span class="text-lg">體驗價</span><span class="ms-1 text-4xl text-red-500 font-bold">$6,888</span>
-          <span class="opacity-70 whitespace-nowrap"><del>原價 $7,600</del></span>
-        </div>
-      </div>
-    </div>
-    <div class="border border-[#fff3] rounded-xl px-4 py-6 bg-primary/50">
-      <div class="grid md:grid-cols-3 gap-8 text-start text-amber-50">
-        <div>
-          <h3 class="text-amber-50 mb-4 flex items-center"><Icon name="mdi:scissors" class="me-1" />精緻造型</h3>
-          <p>包含「完整妝髮設計」與「專業和服着付」，含免費租借和服及配件。</p>
-        </div>
-        <div>
-          <h3 class="text-amber-50 mb-4 flex items-center"><Icon name="mdi:camera" class="me-1" />專業攝影</h3>
-          <p>提供 <strong>6</strong> 張精修照片（可依需求加價增修）並全數贈送所有調色毛片。</p>
-        </div>
-        <div>
-          <h3 class="text-amber-50 mb-4 flex items-center"><Icon name="mdi:gift" class="me-1" />專屬紀念</h3>
-          <p>贈送一張實體照片，或可選擇體驗獨特的現場藍晒製作，帶走充滿手作溫度的顯影回憶。</p>
-        </div>
-      </div>
-    </div>
-    <div class="mt-12">
-      <h2 class="mb-8 text-amber-100">和服預約流程</h2>
-      <ol class="mx-auto max-w-2xl text-start">
-        {
-          bookingSteps.map((step, i) => (
-            <li class="relative flex gap-4 pb-6 last:pb-0">
-              {/* 節點之間的連接線，最後一步不畫 */}
-              {i < bookingSteps.length - 1 && (
-                <span class="absolute left-6 top-12 bottom-0 w-px bg-[#fff3]" aria-hidden="true" />
-              )}
-              <span class="relative z-1 shrink-0 w-12 h-12 rounded-full border border-[#fff3] bg-primary flex items-center justify-center text-amber-100">
-                <Icon name={step.icon} class="text-xl" />
-              </span>
-              <div class="flex-1 border border-[#fff3] rounded-xl px-4 py-3 bg-primary/50">
-                <h4 class="text-amber-100 mb-1">
-                  <span class="opacity-50 me-2">{String(i + 1).padStart(2, "0")}</span>
-                  {step.title}
-                </h4>
-                <p class="text-sm text-amber-50">{step.desc}</p>
-              </div>
-            </li>
-          ))
-        }
-      </ol>
-    </div>
-    <BookingCta {...kimonoBooking} />
   </div>
-  <main class="py-8">
-    <div class="container">
-      <div class="grid gap-x-4 gap-y-8 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {
-          plans.map((plan, i) => {
-            const img = covers[i];
-            const img_b = covers_b[i];
-            return (
-              <a href={`/plans/${plan.slug}`} class="group block no-underline !opacity-100">
-                <div class="relative overflow-hidden rounded-lg">
-                  {img && (
-                    <div class="overflow-hidden relative">
-                      <Image
-                        src={img}
-                        alt={plan.title}
-                        format="webp"
-                        quality={80}
-                        width={500}
-                        class="w-full aspect-[2/3] object-cover"
-                      />
-                      {/* 只有一張圖的方案就沒有 hover 切換 */}
-                      {img_b && (
+
+  <main class="section-tight">
+    <div class="site-container">
+      {/* ── 價目 bento ── */}
+      <section>
+        <div class="reveal">
+          <span class="eyebrow">Plans</span>
+          <h2 class="mt-6 mb-10">方案與價目</h2>
+        </div>
+        <div class="grid gap-5 md:grid-cols-2">
+          {
+            priceCards.map((card, i) => (
+              <div class="shell reveal" style={`--reveal-delay:${i * 90}ms`}>
+                <div class="core flex h-full flex-col px-6 py-7 md:px-8">
+                  <div class="flex items-baseline gap-3">
+                    <span class="numeral text-3xl font-light text-primary-light/45">{card.key}</span>
+                    <h3 class="mb-0 text-amber-100">{card.title}</h3>
+                  </div>
+                  <div class="mt-8 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                    <span class="numeral text-[10px] uppercase tracking-[0.22em] text-cream/45">體驗價</span>
+                    <span class="text-4xl font-light tracking-tight text-accent md:text-5xl">${card.price}</span>
+                    <del class="text-sm whitespace-nowrap text-cream/35">原價 ${card.was}</del>
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      {/* ── 方案內容 ── */}
+      <section class="mt-20">
+        <div class="shell reveal">
+          <div class="core grid gap-10 px-6 py-10 md:grid-cols-3 md:gap-12 md:px-10 md:py-12">
+            {
+              includes.map((item) => (
+                <div>
+                  <span class="include-mark">
+                    <Icon name={item.icon} class="text-lg" />
+                  </span>
+                  <span class="numeral mt-6 block text-[10px] uppercase tracking-[0.22em] text-primary-light/55">
+                    {item.label}
+                  </span>
+                  <h3 class="mt-2 mb-3 text-amber-100">{item.title}</h3>
+                  <p class="mb-0 text-cream/70">{item.desc}</p>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+
+      {/* ── 預約流程 ── */}
+      <section class="mt-24">
+        <div class="reveal">
+          <span class="eyebrow">Process</span>
+          <h2 class="mt-6 mb-12">和服預約流程</h2>
+        </div>
+        <ol class="mx-auto max-w-2xl list-none pl-0">
+          {
+            bookingSteps.map((step, i) => (
+              <li
+                class="reveal relative flex gap-5 pb-6 last:pb-0"
+                style={`--reveal-delay:${i * 80}ms`}>
+                {/* 節點之間的連接線，最後一步不畫 */}
+                {i < bookingSteps.length - 1 && (
+                  <span
+                    class="absolute top-14 bottom-0 left-[1.6rem] w-px bg-gradient-to-b from-hairline-strong to-hairline"
+                    aria-hidden="true"
+                  />
+                )}
+                <span class="step-node">
+                  <Icon name={step.icon} class="text-lg" />
+                </span>
+                <div class="shell flex-1">
+                  <div class="core px-5 py-4">
+                    <h4 class="mb-1 flex items-baseline gap-3 text-amber-100">
+                      <span class="numeral text-xs tracking-[0.2em] text-primary-light/45">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      {step.title}
+                    </h4>
+                    <p class="mb-0 text-sm text-cream/70">{step.desc}</p>
+                  </div>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+
+      <BookingCta {...kimonoBooking} />
+
+      {/* ── 款式一覽 ── */}
+      <section class="mt-24 md:mt-32">
+        <div class="reveal">
+          <span class="eyebrow">Wardrobe</span>
+          <h2 class="mt-6 mb-10">款式一覽</h2>
+        </div>
+        <div class="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
+          {
+            plans.map((plan, i) => {
+              const img = covers[i];
+              const img_b = covers_b[i];
+              return (
+                <a
+                  href={`/plans/${plan.slug}`}
+                  class="plan-card reveal no-rule group block !opacity-100"
+                  style={`--reveal-delay:${(i % 4) * 70}ms`}>
+                  <div class="core-media plan-frame relative">
+                    {img && (
+                      <>
                         <Image
-                          src={img_b}
+                          src={img}
                           alt={plan.title}
                           format="webp"
                           quality={80}
                           width={500}
-                          class="w-full aspect-[2/3] object-cover absolute top-0 left-0 transition-opacity opacity-0 group-hover:opacity-100"
+                          class="aspect-[2/3] w-full object-cover"
                         />
-                      )}
-                    </div>
-                  )}
-                  <div class="text-xs text-white bg-black/50 w-full text-center z-1 absolute bottom-0 transition md:translate-y-full group-hover:translate-y-0">
-                    {plan.type}
+                        {/* 只有一張圖的方案就沒有 hover 切換 */}
+                        {img_b && (
+                          <Image
+                            src={img_b}
+                            alt={plan.title}
+                            format="webp"
+                            quality={80}
+                            width={500}
+                            class="plan-alt absolute top-0 left-0 aspect-[2/3] w-full object-cover"
+                          />
+                        )}
+                      </>
+                    )}
+                    <span class="plan-type numeral">{plan.type}</span>
                   </div>
-                </div>
-                <h4 class="mt-4 text-center group-hover:opacity-80 transition">{plan.title}</h4>
-              </a>
-            );
-          })
-        }
-      </div>
+                  <h4 class="plan-title mt-4 text-center">{plan.title}</h4>
+                </a>
+              );
+            })
+          }
+        </div>
+      </section>
     </div>
     <StickyBookingBar href={kimonoBooking.href} />
   </main>
 </Layout>
+
+<style>
+  .partner :global(img) {
+    border: 1px solid var(--color-hairline-strong);
+    transition:
+      transform 0.7s var(--ease-editorial),
+      border-color 0.7s var(--ease-editorial);
+  }
+  .partner:hover :global(img) {
+    transform: translateY(-3px) scale(1.03);
+    border-color: var(--color-accent);
+  }
+
+  /* 方案內容的圖示：小圓形托座 */
+  .include-mark {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 9999px;
+    border: 1px solid var(--color-hairline);
+    background: rgb(247 242 228 / 0.04);
+    color: var(--color-primary-light);
+  }
+
+  .step-node {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 9999px;
+    border: 1px solid var(--color-hairline);
+    background: var(--color-primary);
+    color: var(--color-primary-light);
+    box-shadow: inset 0 1px 0 rgb(247 242 228 / 0.1);
+  }
+
+  /* 款式卡：外框不動，內圖緩慢推近並交叉淡入第二張 */
+  .plan-frame {
+    border: 1px solid var(--color-hairline);
+    transition: border-color 0.7s var(--ease-editorial);
+  }
+  .plan-card:hover .plan-frame { border-color: var(--color-hairline-strong); }
+  .plan-frame :global(img) {
+    transition:
+      transform 1.1s var(--ease-editorial),
+      opacity 0.8s var(--ease-editorial);
+  }
+  .plan-card:hover .plan-frame :global(img) { transform: scale(1.04); }
+  .plan-alt { opacity: 0; }
+  .plan-card:hover .plan-alt { opacity: 1; }
+
+  .plan-type {
+    position: absolute;
+    right: 0.6rem;
+    bottom: 0.6rem;
+    z-index: 1;
+    border-radius: 9999px;
+    border: 1px solid rgb(247 242 228 / 0.18);
+    background: rgb(8 28 24 / 0.55);
+    padding: 0.2rem 0.65rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    color: var(--color-cream);
+    opacity: 0;
+    transform: translateY(0.4rem);
+    transition:
+      opacity 0.6s var(--ease-editorial),
+      transform 0.6s var(--ease-editorial);
+  }
+  .plan-card:hover .plan-type,
+  .plan-card:focus-visible .plan-type {
+    opacity: 1;
+    transform: none;
+  }
+  /* 手機沒有 hover，類別標直接常駐 */
+  @media (hover: none) {
+    .plan-type { opacity: 1; transform: none; }
+  }
+
+  .plan-title {
+    transition: color 0.6s var(--ease-editorial);
+  }
+  .plan-card:hover .plan-title { color: var(--color-primary-light); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .partner:hover :global(img),
+    .plan-card:hover .plan-frame :global(img) {
+      transform: none;
+    }
+  }
+</style>

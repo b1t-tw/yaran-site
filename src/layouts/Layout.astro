@@ -7,9 +7,11 @@ import hero1 from '../assets/images/20260515_野蘭空間照_CXL_2164.jpg';
 
 interface Props {
   title: string;
+  /* 標題上方的微型膠囊標，不給就用站名 */
+  eyebrow?: string;
 }
 
-const { title } = Astro.props;
+const { title, eyebrow = "Yaran Studio" } = Astro.props;
 const fullTitle = `${title} - YARAN 野蘭攝影棚`;
 const description = 'YARAN 野蘭攝影棚';
 
@@ -53,7 +55,7 @@ const patterns = Object.keys(import.meta.glob('/public/patterns/*.png')).map(
     <meta name="generator" content={Astro.generator} />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chiron+Sung+HK:ital,wght@0,200..900;1,200..900&family=Cinzel:wght@400..900&0&family=Cormorant+Infant:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Chiron+Sung+HK:ital,wght@0,200..900;1,200..900&family=Cinzel:wght@400..700&family=Cormorant+Infant:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q3919S3X7X"></script>
     <script is:inline>
@@ -130,17 +132,47 @@ const patterns = Object.keys(import.meta.glob('/public/patterns/*.png')).map(
     <!-- End Google Tag Manager (noscript) -->
     {
       title !== '首頁' && (
-        <Header/>
-        <slot name="subheader" />
-        <div class="text-center border-b border-[#fff3]">
-          <h1 class="py-8">{title}</h1>
-          <div class="text-primary-light">
-            <slot name="subtitle" />
+        <>
+          <Header />
+          <slot name="subheader" />
+          <div class="text-center">
+            <div class="site-container pt-14 pb-2 md:pt-20">
+              <span class="eyebrow reveal">{eyebrow}</span>
+              <h1 class="mt-7 reveal" style="--reveal-delay:100ms">
+                {title}
+              </h1>
+            </div>
+            <div class="reveal mt-7 text-primary-light" style="--reveal-delay:200ms">
+              <slot name="subtitle" />
+            </div>
+            <div class="mx-auto h-px max-w-5xl bg-gradient-to-r from-transparent via-hairline-strong to-transparent" />
           </div>
-        </div>
+        </>
       )
     }
     <slot />
     <Footer />
+    <script is:inline>
+      // 全站捲動進場：只用 IntersectionObserver，不掛 scroll 事件
+      (function () {
+        var els = document.querySelectorAll('.reveal');
+        if (!els.length) return;
+        if (!('IntersectionObserver' in window)) {
+          els.forEach(function (el) { el.classList.add('is-in'); });
+          return;
+        }
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.add('is-in');
+              io.unobserve(entry.target);
+            });
+          },
+          { threshold: 0.1, rootMargin: '0px 0px -6% 0px' }
+        );
+        els.forEach(function (el) { io.observe(el); });
+      })();
+    </script>
   </body>
 </html>

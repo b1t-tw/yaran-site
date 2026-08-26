@@ -5,147 +5,235 @@ import PhotoGallery from "../components/PhotoGallery.astro";
 import BookingCta from "../components/BookingCta.astro";
 import StickyBookingBar from "../components/StickyBookingBar.astro";
 import { studioBooking } from "../lib/booking";
-import { Image } from "astro:assets";
+import { Image, getImage } from "astro:assets";
 import floorPlan from "../assets/yaran_floor_plan_tp.png";
+
+// 平面圖是 2.88:1 的長圖，手機容器只有 ~334px 寬，塞滿版只剩 116px 高、標註讀不到。
+// 行內版改成橫向捲動並以視窗高度定尺寸，另備全尺寸圖給燈箱做全螢幕縮放。
+const floorPlanFull = await getImage({ src: floorPlan, format: "webp", quality: 88, width: floorPlan.width });
+
+const gearFree = [
+  "Yongnuo YNRAY200 單溫 x1",
+  "Yongnuo YNLUX100 PRO x1",
+  "Yongnuo YN6C-360IV 燈棒 x1",
+  "55cm 八角柔光罩 x1",
+  "90cm 八角柔光罩 x1",
+  "30cm*120cm 長條柔光罩 x1",
+  "65cm 燈籠柔光罩 x1",
+  "180cm 輕便型燈腳 x1",
+  "200cm 輕便型燈腳 x2",
+];
+
+const gearPaid = [
+  "Amaran 200xS x1 ── 500 元／次",
+  "Godox BLP LED 投影筒 x1 ── 200 元／次",
+  "300cm C-Stand+斜臂 x1 ── 搭配上述設備提供",
+  "120cm 柔光傘 ── 搭配上述設備提供",
+];
+
+// 各棚景：文案原樣保留，版面統一由 editorial split 承接
+const scenes = [
+  {
+    dir: "tea-shop",
+    label: "Taisho Café",
+    title: "大正喫茶店",
+    body: `<p>久違的休息日，推開沉穩木門，轉身在玄關掛起大衣與禮帽。空氣中微帶苦澀的咖啡香沁入鼻腔，唱盤旋轉出爵士樂的慵懶節奏。</p>
+<p>​陽光穿透華麗的玻璃花窗，映照在剛上桌的冰淇淋蘇打上。女學生們為了那夢幻晶瑩的水藍驚呼連連；另一角，文人雅士啜飲黑咖啡、激辯著新思潮，熱蛋糕上的奶油在談笑間悄悄融化。</p>
+<p>時髦的甜品、新奇的口味，在​這方喫茶空間裡引領著摩登新日常。</p>`,
+    props: "推車、仿真甜點及飲品、底片相機、冰淇淋模型、帽子、圍巾、可滑動假牆",
+    notes: [
+      "此場景若需要拍攝自備甜品，請提前告知（僅用於喫茶店區拍攝，不可攜帶至其他區域，真的要吃掉請到梳化間），並於結束時清理恢復原狀，否則視情況酌收清潔費。",
+    ],
+  },
+  {
+    dir: "sewing-room",
+    label: "Atelier",
+    title: "私人洋裁室",
+    body: `<p>午後的斜陽滲透蕾絲，在鐵黑色的縫紉機身上輕盈地灑下。布料推進時的輕微摩擦、老踏板規律的軋軋聲，在針線交錯間呼吸，細細編織著和洋交融的溫柔。</p>`,
+    props: "長尺、帽子、手套、畫框、仿真書、布料、手提箱",
+    notes: ["裁縫車已將針及皮帶卸下，使用時仍請注意安全"],
+  },
+  {
+    dir: "tatami",
+    label: "Tatami",
+    title: "榻榻米生活區",
+    body: `<p>一日結束前，沉浸於無人打擾的世界，翻翻未讀完的書、撥弄幾下三味線、打牌下棋與自己對弈，累了就隨性往榻榻米上一躺，閉上眼，深吸一口沉靜的藺草香，度過專注而又閒散的時光。</p>`,
+    props: "三味線、扇子、底片機、面具、圍棋、古本、鏡子、百人一首歌牌",
+    notes: ["禁止「穿鞋」、「赤腳」上榻榻米"],
+  },
+  {
+    dir: "theatre",
+    label: "Theatre",
+    title: "野蘭小劇場",
+    body: `<p>百貨店的玻璃櫥窗外，時髦男女駐足觀望。<br />
+深藍布幔低垂，金色雕刻畫框交織出奇幻時空；<br />
+精緻洋服如魅影般懸掛，靜待主角現身。<br />
+對於生活的憧憬與幻想，在此華麗登台。</p>`,
+    props: "畫框、仿真花、吊掛用衣架",
+    notes: ["相框請勿掛上過重物品或整個人坐上去", "此棚景將不定時更新"],
+  },
+];
 ---
 
-<Layout title="棚景介紹">
-  <div class="mb-8 px-4" slot="subtitle">
-    <div class="md:hidden">
-      縱使生於幽谷峭壁<br />
-      亦要綻放一身大正摩登的傲骨<br />
-      來到野蘭<br />
-      微醺在和洋交織的夢境裡<br />
-      兀自浪漫地呼吸
-    </div>
-    <div class="hidden md:block">
-      縱使生於幽谷峭壁，亦要綻放一身大正摩登的傲骨；<br />
-      來到野蘭，微醺在和洋交織的夢境裡，兀自浪漫地呼吸。
-    </div>
+<Layout title="棚景介紹" eyebrow="Scenes">
+  <div class="site-container mb-16 max-w-2xl" slot="subtitle">
+    <p class="mb-0 text-lg leading-loose md:text-xl">
+      <span class="md:hidden">
+        縱使生於幽谷峭壁<br />
+        亦要綻放一身大正摩登的傲骨<br />
+        來到野蘭<br />
+        微醺在和洋交織的夢境裡<br />
+        兀自浪漫地呼吸
+      </span>
+      <span class="hidden md:inline">
+        縱使生於幽谷峭壁，亦要綻放一身大正摩登的傲骨；<br />
+        來到野蘭，微醺在和洋交織的夢境裡，兀自浪漫地呼吸。
+      </span>
+    </p>
   </div>
-  <main class="py-8">
-    <div class="container">
-      <div class="mb-6">
-        <h2 class="mb-6">✿ 棚內設備 ✿</h2>
-        <div class="grid md:grid-cols-2 mb-6 gap-6">
-          <div>
-            <h3 class="mb-3">免費使用</h3>
-            <ul class="list-disc pl-6 mb-4">
-              <li>Yongnuo YNRAY200 單溫 x1</li>
-              <li>Yongnuo YNLUX100 PRO x1</li>
-              <li>Yongnuo YN6C-360IV 燈棒 x1</li>
-              <li>55cm 八角柔光罩 x1</li>
-              <li>90cm 八角柔光罩 x1</li>
-              <li>30cm*120cm 長條柔光罩 x1</li>
-              <li>65cm 燈籠柔光罩 x1</li>
-              <li>180cm 輕便型燈腳 x1</li>
-              <li>200cm 輕便型燈腳 x2</li>
-            </ul>
+
+  <main class="section-tight">
+    <div class="site-container">
+      {/* ── 棚內設備：兩張雙層卡殼 ── */}
+      <section>
+        <div class="reveal">
+          <span class="eyebrow">Equipment</span>
+          <h2 class="mt-6 mb-10">棚內設備</h2>
+        </div>
+        <div class="grid gap-5 md:grid-cols-2">
+          <div class="shell reveal">
+            <div class="core h-full px-6 py-7">
+              <h3 class="mb-6 text-amber-100">免費使用</h3>
+              <ul class="list-editorial mb-0 text-cream/75">
+                {gearFree.map((item) => <li>{item}</li>)}
+              </ul>
+            </div>
           </div>
-          <div>
-            <h3 class="mb-3">付費使用</h3>
-            <ul class="list-disc pl-6 mb-4">
-              <li>Amaran 200xS x1 ── 500 元／次</li>
-              <li>Godox BLP LED 投影筒 x1 ── 200 元／次</li>
-              <li>300cm C-Stand+斜臂 x1 ── 搭配上述設備提供</li>
-              <li>120cm 柔光傘 ── 搭配上述設備提供</li>
-            </ul>
+          <div class="shell reveal" style="--reveal-delay:120ms">
+            <div class="core h-full px-6 py-7">
+              <h3 class="mb-6 text-amber-100">付費使用</h3>
+              <ul class="list-editorial mb-0 text-cream/75">
+                {gearPaid.map((item) => <li>{item}</li>)}
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
-      <hr />
-      <div class="mb-6">
-        <h2 class="mb-6">✿ 空間平面圖 ✿</h2>
-        <div class="p-1 bg-primary/50">
-          <Image src={floorPlan} alt="Yaran 野蘭攝影棚空間平面圖" format="webp" quality={85} class="w-full invert" />
-        </div>
-      </div>
-      <hr />
-      <div class="mb-6">
-        <h2 class="mb-6">𖠁 大正喫茶店 𖠁</h2>
-        <div class="grid md:grid-cols-2 mb-6 gap-6">
-          <ImageSwiper dir="tea-shop" />
-          <div class="flex flex-col justify-center">
-            <p>
-              久違的休息日，推開沉穩木門，轉身在玄關掛起大衣與禮帽。空氣中微帶苦澀的咖啡香沁入鼻腔，唱盤旋轉出爵士樂的慵懶節奏。
-            </p>
-            <p>
-              ​陽光穿透華麗的玻璃花窗，映照在剛上桌的冰淇淋蘇打上。女學生們為了那夢幻晶瑩的水藍驚呼連連；另一角，文人雅士啜飲黑咖啡、激辯著新思潮，熱蛋糕上的奶油在談笑間悄悄融化。
-            </p>
-            <p>時髦的甜品、新奇的口味，在​這方喫茶空間裡引領著摩登新日常。</p>
-          </div>
-        </div>
-        <p>⊱✿⊰</p>
-        <h3 class="mt-4 mb-3">✧ 場景道具 ✧</h3>
-        <p>推車、仿真甜點及飲品、底片相機、冰淇淋模型、帽子、圍巾、可滑動假牆</p>
-        <h3 class="mt-4 mb-3">✧ 注意事項 ✧</h3>
-        <p>
-          此場景若需要拍攝自備甜品，請提前告知（僅用於喫茶店區拍攝，不可攜帶至其他區域，真的要吃掉請到梳化間），並於結束時清理恢復原狀，否則視情況酌收清潔費。
-        </p>
-      </div>
-      <hr />
-      <div class="mb-6">
-        <h2 class="mb-6">𖠁 私人洋裁室 𖠁</h2>
-        <div class="grid md:grid-cols-2 mb-6 gap-6">
-          <div class="md:order-1 min-w-1 w-full">
-            <ImageSwiper dir="sewing-room" />
-          </div>
-          <div class="flex flex-col justify-center">
-            午後的斜陽滲透蕾絲，在鐵黑色的縫紉機身上輕盈地灑下。布料推進時的輕微摩擦、老踏板規律的軋軋聲，在針線交錯間呼吸，細細編織著和洋交融的溫柔。
-          </div>
-        </div>
-        <p>⊱✿⊰</p>
-        <h3 class="mt-4 mb-3">✧ 場景道具 ✧</h3>
-        <p>長尺、帽子、手套、畫框、仿真書、布料、手提箱</p>
-        <h3 class="mt-4 mb-3">✧ 注意事項 ✧</h3>
-        <p>裁縫車已將針及皮帶卸下，使用時仍請注意安全</p>
-      </div>
-      <hr />
-      <div class="mb-6">
-        <h2 class="mb-6">𖠁 榻榻米生活區 𖠁</h2>
-        <div class="grid md:grid-cols-2 mb-6 gap-6">
-          <ImageSwiper dir="tatami" />
-          <div class="flex flex-col justify-center">
-            一日結束前，沉浸於無人打擾的世界，翻翻未讀完的書、撥弄幾下三味線、打牌下棋與自己對弈，累了就隨性往榻榻米上一躺，閉上眼，深吸一口沉靜的藺草香，度過專注而又閒散的時光。
-          </div>
-        </div>
-        <p>⊱✿⊰</p>
-        <h3 class="mt-4 mb-3">✧ 場景道具 ✧</h3>
-        <p>三味線、扇子、底片機、面具、圍棋、古本、鏡子、百人一首歌牌</p>
-        <h3 class="mt-4 mb-3">✧ 注意事項 ✧</h3>
-        <p>禁止「穿鞋」、「赤腳」上榻榻米</p>
-      </div>
-      <hr />
-      <div class="mb-6">
-        <h2 class="mb-6">𖠁 野蘭小劇場 𖠁</h2>
-        <div class="grid md:grid-cols-2 mb-6 gap-6">
-          <div class="md:order-1 min-w-1 w-full">
-            <ImageSwiper dir="theatre" />
-          </div>
-          <div class="flex flex-col justify-center">
-            百貨店的玻璃櫥窗外，時髦男女駐足觀望。<br />
-            深藍布幔低垂，金色雕刻畫框交織出奇幻時空；<br />
-            精緻洋服如魅影般懸掛，靜待主角現身。<br />
-            對於生活的憧憬與幻想，在此華麗登台。
-          </div>
-        </div>
-        <p>⊱✿⊰</p>
-        <h3 class="mt-4 mb-3">✧ 場景道具 ✧</h3>
-        <p>畫框、仿真花、吊掛用衣架</p>
-        <h3 class="mt-4 mb-3">✧ 注意事項 ✧</h3>
-        <ul class="list-disc pl-6 mb-2">
-          <li>相框請勿掛上過重物品或整個人坐上去</li>
-          <li>此棚景將不定時更新</li>
-        </ul>
-      </div>
+      </section>
+
       <hr />
 
-      <div class="mb-6">
-        <h2 class="mb-8">𖠁 其他場景照片 𖠁</h2>
-        <PhotoGallery dir="other" alt="Yaran 野蘭攝影棚其他場景照" />
-      </div>
+      {/* ── 平面圖 ── */}
+      <section>
+        <div class="reveal">
+          <span class="eyebrow">Floor plan</span>
+          <h2 class="mt-6 mb-10">空間平面圖</h2>
+        </div>
+        <div class="shell reveal">
+          <div id="floor-plan" class="core-media overflow-x-auto md:overflow-x-visible">
+            <a
+              href={floorPlanFull.src}
+              data-pswp-width={floorPlanFull.attributes.width}
+              data-pswp-height={floorPlanFull.attributes.height}
+              class="no-rule block w-max cursor-zoom-in md:w-full">
+              <Image
+                src={floorPlan}
+                alt="Yaran 野蘭攝影棚空間平面圖"
+                format="webp"
+                quality={85}
+                width={2000}
+                class="h-[46svh] w-auto max-w-none invert-100 p-4 md:h-auto md:w-full"
+              />
+            </a>
+          </div>
+        </div>
+        <p class="numeral mt-4 mb-0 text-center text-xs tracking-[0.16em] text-cream/40 md:hidden">
+          左右滑動查看細節・點擊放大
+        </p>
+      </section>
+
+      {/* ── 各棚景：左右交錯的 editorial split ── */}
+      {
+        scenes.map((scene, i) => (
+          <>
+            <hr />
+            <section>
+              <div class="grid gap-10 md:grid-cols-2 md:items-center md:gap-14">
+                {/* min-w-0：grid item 預設 min-width:auto，會被 swiper 的 flex 內容撐爆 */}
+                <div class:list={["shell reveal min-w-0", i % 2 === 1 && "md:order-1"]}>
+                  <ImageSwiper dir={scene.dir} />
+                </div>
+                <div class="reveal" style="--reveal-delay:120ms">
+                  <span class="eyebrow">{scene.label}</span>
+                  <h2 class="mt-6 mb-6">{scene.title}</h2>
+                  <div class="text-cream/75" set:html={scene.body} />
+                </div>
+              </div>
+
+              <div class="reveal mt-12 grid gap-8 border-t border-hairline pt-10 md:grid-cols-[10rem_1fr] md:gap-12">
+                <span class="eyebrow self-start">Props</span>
+                <p class="mb-0 text-cream/75">{scene.props}</p>
+              </div>
+              <div class="reveal mt-8 grid gap-8 border-t border-hairline pt-10 md:grid-cols-[10rem_1fr] md:gap-12">
+                <span class="eyebrow self-start">Notes</span>
+                {/* 只有一條就不要為了排版硬包成清單 */}
+                {scene.notes.length === 1 ? (
+                  <p class="mb-0 text-cream/75">{scene.notes[0]}</p>
+                ) : (
+                  <ul class="list-editorial mb-0 text-cream/75">
+                    {scene.notes.map((note) => (
+                      <li>{note}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </section>
+          </>
+        ))
+      }
+
+      <hr />
+
+      <section>
+        <div class="reveal">
+          <span class="eyebrow">Gallery</span>
+          <h2 class="mt-6 mb-10">其他場景照片</h2>
+        </div>
+        <div class="reveal">
+          <PhotoGallery dir="other" alt="Yaran 野蘭攝影棚其他場景照" />
+        </div>
+      </section>
+
       <BookingCta {...studioBooking} />
     </div>
     <StickyBookingBar href={studioBooking.href} />
   </main>
 </Layout>
+
+<style is:global>
+  /* 平面圖燈箱沿用行內的反相（深底白線），才不會點開變成黑字白底 */
+  .pswp--floor-plan img.pswp__img {
+    filter: invert(1);
+  }
+</style>
+
+<script>
+  import PhotoSwipeLightbox from "photoswipe/lightbox";
+  import "photoswipe/style.css";
+  import { enhanceLightbox } from "../lib/lightbox";
+
+  if (document.getElementById("floor-plan")) {
+    const lightbox = new PhotoSwipeLightbox({
+      gallery: "#floor-plan",
+      children: "a",
+      pswpModule: () => import("photoswipe"),
+      bgClickAction: "close",
+      mainClass: "pswp--floor-plan",
+      // 開圖先看全圖（直立手機用 fill 會直接放大到看不出方位），雙擊／雙指再放大
+      initialZoomLevel: "fit",
+      secondaryZoomLevel: "fill",
+      maxZoomLevel: 6,
+    });
+    enhanceLightbox(lightbox);
+    lightbox.init();
+  }
+</script>

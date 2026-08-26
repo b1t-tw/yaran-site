@@ -17,15 +17,34 @@ export function getStaticPaths() {
 const { plan } = Astro.props;
 ---
 
-<Layout title={`和服方案│${plan.title}`}>
+<Layout title={`和服方案│${plan.title}`} eyebrow="Kimono">
   <PlanTabs slot="subheader" />
-  <div slot="subtitle" class="mb-8">方案 {plan.type}</div>
-  <main class="py-8">
-    <div class="container mb-8">
-      <h2 class="mb-6">✿ 尺寸 ✿</h2>
-      <div class="mb-8 whitespace-pre">{plan.intro}</div>
-      <h2 class="mb-6">✿ 照片集 ✿</h2>
-      <PhotoGallery dir={`plans/${plan.imageDir}`} alt={plan.title} objectfit="cover" />
+  <div class="numeral mb-8 text-xs uppercase tracking-[0.2em] text-cream/50" slot="subtitle">
+    方案 {plan.type}
+  </div>
+
+  <main class="section-tight">
+    <div class="site-container">
+      <section class="reveal">
+        <span class="eyebrow">Sizing</span>
+        <h2 class="mt-6 mb-8">尺寸</h2>
+        <div class="shell">
+          <div class="core px-6 py-7 md:px-8">
+            <div class="mb-0 whitespace-pre-line text-cream/80">{plan.intro}</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mt-20">
+        <div class="reveal">
+          <span class="eyebrow">Gallery</span>
+          <h2 class="mt-6 mb-10">照片集</h2>
+        </div>
+        <div class="reveal">
+          <PhotoGallery dir={`plans/${plan.imageDir}`} alt={plan.title} objectfit="cover" />
+        </div>
+      </section>
+
       <BookingCta {...kimonoBooking} />
     </div>
     <StickyBookingBar href={kimonoBooking.href} />

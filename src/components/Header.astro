@@ -1,47 +1,235 @@
 ---
-import { Icon } from "astro-icon/components";
 import { Image } from "astro:assets";
 import logoW from "../assets/logo_white.png";
 
 const links = [
-  { name: "HOME", href: "/" },
-  { name: "租棚須知", href: "/rules" },
-  { name: "棚景介紹", href: "/scenes" },
-  { name: "和服方案", href: "/plans" },
+  { name: "HOME", label: "首頁", href: "/" },
+  { name: "RULES", label: "租棚須知", href: "/rules" },
+  { name: "SCENES", label: "棚景介紹", href: "/scenes" },
+  { name: "KIMONO", label: "和服方案", href: "/plans" },
 ];
 
-const isActive = (href: string) => {
-  const currentPath = Astro.url.pathname;
-  console.log("currentPath:", currentPath, "href:", href);
-  return currentPath === href || (href !== "/" && currentPath.startsWith(href));
-};
-
-const { hideLogo } = Astro.props;
+const currentPath = Astro.url.pathname;
+const isActive = (href: string) =>
+  currentPath === href || (href !== "/" && currentPath.startsWith(href));
 ---
 
-<header>
-  {
-    !hideLogo && (
-      <div class="flex items-center justify-center py-6">
-        <a href="/">
-          <Image src={logoW} alt="Yaran 野蘭攝影棚" format="webp" quality={85} class="h-12 w-auto" />
-        </a>
-      </div>
-    )
+{/* 浮島導覽：外層留在文件流中，選單開啟時由它保留 Header 的高度。 */}
+<div id="nav-slot" class="sticky top-0 z-40 pointer-events-none">
+  <header class="px-4 pt-5 pb-2">
+    <nav
+      class="nav-pill pointer-events-auto mx-auto flex w-max max-w-full items-center gap-1 rounded-full border border-hairline bg-primary-dark/65 p-1.5 backdrop-blur-xl">
+      <a href="/" class="flex-none rounded-full px-3 py-1.5" aria-label="Yaran 野蘭攝影棚">
+        <Image src={logoW} alt="Yaran 野蘭攝影棚" format="webp" quality={90} class="h-6 w-auto md:h-7" />
+      </a>
+
+      <span class="h-5 w-px flex-none bg-hairline" aria-hidden="true"></span>
+
+      {/* 桌機：連結直接躺在膠囊裡 */}
+      <ul class="hidden items-center gap-1 md:flex">
+        {
+          links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class:list={["nav-link", isActive(link.href) && "is-active"]}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      {/* 手機：漢堡按鈕，兩條線會旋轉合成 X */}
+      <button
+        id="nav-toggle"
+        type="button"
+        class="burger grid h-9 w-9 flex-none place-items-center rounded-full md:hidden"
+        aria-label="開啟選單"
+        aria-expanded="false"
+        aria-controls="nav-overlay">
+        <span class="burger-box" aria-hidden="true">
+          <span class="burger-line burger-line-top"></span>
+          <span class="burger-line burger-line-bottom"></span>
+        </span>
+      </button>
+    </nav>
+  </header>
+</div>
+
+{/* 手機全螢幕選單：深色遮罩 + 逐項延遲浮出 */}
+<div id="nav-overlay" class="nav-overlay fixed inset-0 z-30 md:hidden backdrop-blur-xs" hidden>
+  <div class="absolute inset-0 bg-primary-dark/85"></div>
+  <ul class="relative flex min-h-[100dvh] flex-col justify-center gap-2 px-8 pb-16">
+    {
+      links.map((link, i) => (
+        <li class="nav-overlay-item" style={`--stagger:${90 + i * 70}ms`}>
+          <a href={link.href} class:list={["nav-overlay-link", isActive(link.href) && "is-active"]}>
+            <span class="numeral text-xs opacity-40">{String(i + 1).padStart(2, "0")}</span>
+            <span>{link.label}</span>
+            <span class="nav-overlay-en">{link.name}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .nav-pill {
+    box-shadow: 0 20px 50px -30px rgb(0 0 0 / 0.9);
   }
-  <nav class="border-y-1 border-[#fff3] py-3 font-semibold">
-    <ul class="flex space-x-6 justify-center items-center px-4">
-      {
-        links.map((link) => (
-          <li>
-            <a
-              href={link.href}
-              class={`pb-1 border-b-2 border-transparent hover:border-amber-100 hover:!opacity-100 transition ${isActive(link.href) ? "!border-amber-50" : ""}`}>
-              {link.name}
-            </a>
-          </li>
-        ))
+
+  /* 首頁的 Header 在 hero 後方；選單開啟時一律固定到頂端，避免尚未 sticky 時壓住選單項目。 */
+  @media (max-width: 767.98px) {
+    .is-menu-open header {
+      position: fixed;
+      inset-inline: 0;
+      top: 0;
+    }
+  }
+
+  .nav-link {
+    display: inline-block;
+    padding: 0.4rem 0.95rem;
+    border-radius: 9999px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    color: rgb(247 242 228 / 0.72);
+    transition:
+      background-color 0.6s var(--ease-editorial),
+      color 0.6s var(--ease-editorial);
+  }
+  .nav-link:hover {
+    background: rgb(247 242 228 / 0.07);
+    color: var(--color-cream);
+    opacity: 1;
+  }
+  .nav-link.is-active {
+    background: rgb(247 242 228 / 0.1);
+    color: var(--color-primary-light);
+    opacity: 1;
+  }
+
+  /* ── 漢堡 → X 的形變 ── */
+  .burger-box {
+    position: relative;
+    display: block;
+    width: 1.05rem;
+    height: 0.6rem;
+  }
+  .burger-line {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--color-cream);
+    transition: transform 0.6s var(--ease-editorial);
+  }
+  .burger-line-top { top: 0; }
+  .burger-line-bottom { bottom: 0; }
+  .burger[aria-expanded="true"] .burger-line-top {
+    transform: translateY(0.295rem) rotate(45deg);
+  }
+  .burger[aria-expanded="true"] .burger-line-bottom {
+    transform: translateY(-0.295rem) rotate(-45deg);
+  }
+
+  /* ── 全螢幕選單 ── */
+  .nav-overlay {
+    opacity: 0;
+    transition: opacity 0.6s var(--ease-editorial);
+  }
+  .nav-overlay.is-open { opacity: 1; }
+
+  .nav-overlay-item {
+    margin: 0;
+    opacity: 0;
+    transform: translateY(3rem);
+    transition:
+      opacity 0.8s var(--ease-editorial),
+      transform 0.8s var(--ease-editorial);
+  }
+  .nav-overlay.is-open .nav-overlay-item {
+    opacity: 1;
+    transform: none;
+    transition-delay: var(--stagger);
+  }
+
+  .nav-overlay-link {
+    display: flex;
+    align-items: baseline;
+    gap: 0.85rem;
+    padding: 0.65rem 0;
+    font-size: clamp(1.5rem, 11vw, 2rem);
+    font-weight: 300;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    border-bottom: 1px solid var(--color-hairline);
+  }
+  .nav-overlay-link.is-active { color: var(--color-primary-light); }
+  .nav-overlay-en {
+    margin-left: auto;
+    font-family: var(--font-eyebrow);
+    font-size: 0.65rem;
+    letter-spacing: 0.24em;
+    opacity: 0.4;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-overlay-item,
+    .burger-line {
+      transition: none;
+    }
+    .nav-overlay-item {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.getElementById("nav-toggle");
+  const overlay = document.getElementById("nav-overlay");
+  const slot = document.getElementById("nav-slot");
+
+  if (toggle && overlay && slot) {
+    overlay.addEventListener("transitionend", (event) => {
+      if (
+        event.target !== overlay ||
+        event.propertyName !== "opacity" ||
+        overlay.classList.contains("is-open")
+      ) return;
+      overlay.hidden = true;
+      slot.classList.remove("is-menu-open");
+      slot.style.height = "";
+    });
+
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-label", open ? "關閉選單" : "開啟選單");
+      document.body.style.overflow = open ? "hidden" : "";
+      if (open) {
+        slot.style.height = `${slot.offsetHeight}px`;
+        slot.classList.add("is-menu-open");
+        overlay.hidden = false;
+        // 先讓元素上場，下一幀才加 is-open，逐項延遲才會真的跑
+        requestAnimationFrame(() => overlay.classList.add("is-open"));
+      } else {
+        overlay.classList.remove("is-open");
       }
-    </ul>
-  </nav>
-</header>
+    };
+
+    toggle.addEventListener("click", () =>
+      setOpen(toggle.getAttribute("aria-expanded") !== "true")
+    );
+    overlay.addEventListener("click", (e) => {
+      if ((e.target as HTMLElement).closest("a")) setOpen(false);
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") setOpen(false);
+    });
+  }
+</script>

@@ -19,14 +19,18 @@ export function enhanceLightbox(lightbox: PhotoSwipeLightbox, hasCaptions = fals
   }
 
   // 手機觸控只走 tapAction（預設 toggle-controls，不會關閉），桌面滑鼠才有 bgClickAction。
-  // 覆寫 tapAction：點到圖片外的背景 → 關閉；點圖片本身 → 沿用預設切換控制列。
+  // 覆寫 tapAction：點到圖片外的背景 → 關閉；點圖片本身 → 切換圖說／圓點。
+  //
+  // 不沿用 PhotoSwipe 內建的 toggle-controls：它切的是 pswp--ui-visible，而該 class 同時
+  // 負責開關場動畫，`.pswp__top-bar`（關閉／縮放鈕）屬於 .pswp__hide-on-close，一被切掉就
+  // opacity:0.005 + pointer-events:none，使用者會關不掉燈箱。改用獨立 class，只收合圖說與圓點。
   lightbox.options.tapAction = (_point, e) => {
     const pswp = lightbox.pswp as any;
     const cls = (e.target as HTMLElement).classList;
     if (cls.contains("pswp__item") || cls.contains("pswp__zoom-wrap")) {
       pswp.close();
     } else {
-      pswp.element?.classList.toggle("pswp--ui-visible");
+      pswp.element?.classList.toggle("pswp--controls-hidden");
     }
   };
 
