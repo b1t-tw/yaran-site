@@ -5,14 +5,19 @@ import { Icon } from "astro-icon/components";
 // 捲到頁面內的 BookingCta 時自動收起，避免同一畫面出現兩個預約按鈕。
 interface Props {
   href: string;
+  hideOnHero?: boolean;
 }
 
-const { href } = Astro.props;
+const { href, hideOnHero = false } = Astro.props;
 ---
 
 <div
   id="sticky-booking"
-  class="sticky-booking fixed inset-x-0 bottom-0 z-40 px-4 pt-3 md:inset-x-auto md:right-6 md:bottom-6 md:p-0">
+  data-hide-on-hero={hideOnHero ? "true" : undefined}
+  class:list={[
+    "sticky-booking fixed inset-x-0 bottom-0 z-40 px-4 pt-3 md:inset-x-auto md:right-6 md:bottom-6 md:p-0",
+    { "is-hidden": hideOnHero },
+  ]}>
   {/* 手機：整條玻璃底座；桌機：只留浮動膠囊 */}
   <div
     class="rounded-full border border-hairline bg-primary-dark/70 p-1.5 backdrop-blur-xl md:border-0 md:bg-transparent md:p-0 md:backdrop-blur-none">
@@ -65,12 +70,20 @@ const { href } = Astro.props;
     const inPageCta = document.getElementById("booking-cta");
     if (!bar || !inPageCta) return;
 
+    const hero = bar.dataset.hideOnHero === "true" ? document.getElementById("hero") : null;
+    const visibleTargets = new Set<Element>(hero ? [hero] : []);
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => bar.classList.toggle("is-hidden", entry.isIntersecting));
+        entries.forEach((entry) => {
+          const visible = entry.target === hero ? entry.isIntersecting : entry.intersectionRatio >= 0.2;
+          visible ? visibleTargets.add(entry.target) : visibleTargets.delete(entry.target);
+        });
+        bar.classList.toggle("is-hidden", visibleTargets.size > 0);
       },
-      { threshold: 0.2 },
+      { threshold: [0, 0.2] },
     );
+
     observer.observe(inPageCta);
+    if (hero) observer.observe(hero);
   });
 </script>

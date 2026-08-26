@@ -5,6 +5,7 @@ import Header from "../components/Header.astro";
 import EntryPersonnel from "../components/EntryPersonnel.astro";
 import BookingNotice from "../components/BookingNotice.astro";
 import BookingCta from "../components/BookingCta.astro";
+import StickyBookingBar from "../components/StickyBookingBar.astro";
 import { studioBooking } from "../lib/booking";
 import { Icon } from "astro-icon/components";
 import logoH from "../assets/logo_h_gold.png";
@@ -43,11 +44,11 @@ const rates = [
 ];
 
 const steps = [
-  { title: "確認預約時段", desc: "仔細閱讀攝影棚使用規範後，網站填表預約。", href: studioBooking.href, linkText: "網站填表預約" },
+  { title: "確認預約時段", desc: "仔細閱讀攝影棚使用規範後，", href: studioBooking.href, linkText: "線上填表預約" },
   { title: "支付訂金", desc: "一日內完成付款，逾時視同取消。", href: "/prepaid", linkText: "線上金流" },
-  { title: "私訊 FB／IG", desc: "提供「預約人姓名」、「預約時間」、「電話」。" },
-  { title: "確認預約", desc: "小幫手會將官網日曆更新。" },
-  { title: "當天入場繳餘款", desc: "可用現金或金流付款。" },
+  { title: "私訊 FB／IG", desc: "提供「預約人姓名」、「預約時間」、「電話」" },
+  { title: "確認預約", desc: "系統會自動更新日曆" },
+  { title: "當天入場繳餘款", desc: "可用現金或金流付款" },
 ];
 ---
 
@@ -253,6 +254,7 @@ const steps = [
         <BookingCta {...studioBooking} />
       </div>
     </section>
+    <StickyBookingBar href={studioBooking.href} hideOnHero />
   </main>
 </Layout>
 
