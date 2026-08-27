@@ -227,9 +227,12 @@
     padding: 0.5rem;
     background: rgb(247 242 228 / 0.035);
     border: 1px solid var(--color-hairline);
+  }
+  /* hover 回饋只給整塊可點的卡殼（地圖、平面圖、圖集），純靜態內容不要亮邊 */
+  .shell-interactive {
     transition: border-color 0.7s var(--ease-editorial), background-color 0.7s var(--ease-editorial);
   }
-  .shell:hover { border-color: var(--color-hairline-strong); }
+  .shell-interactive:hover { border-color: var(--color-hairline-strong); }
 
   .core {
     border-radius: var(--radius-core);
