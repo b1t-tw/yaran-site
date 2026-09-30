@@ -5,7 +5,16 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://yaran.studio',
-  integrations: [icon(), sitemap()],
+  integrations: [
+    icon(),
+    // 只讓主要頁面進 sitemap；款式詳細頁與付款轉址頁在 Layout 設了 noindex
+    sitemap({
+      filter: (page) => {
+        const { pathname } = new URL(page);
+        return !/^\/plans\/.+/.test(pathname) && !['/payment/', '/prepaid/'].includes(pathname);
+      },
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
     // photoswipe 只在燈箱開啟時才 dynamic import，dev server 啟動掃不到，

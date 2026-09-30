@@ -10,9 +10,11 @@ interface Props {
   title: string;
   /* 標題上方的微型膠囊標，不給就用站名 */
   eyebrow?: string;
+  /* 不讓搜尋引擎收錄（仍會跟隨連結）；同時要在 astro.config 的 sitemap filter 排除 */
+  noindex?: boolean;
 }
 
-const { title, eyebrow = "Yaran Studio" } = Astro.props;
+const { title, eyebrow = "Yaran Studio", noindex = false } = Astro.props;
 const fullTitle = `${title} - YARAN 野蘭攝影棚`;
 const description = 'YARAN 野蘭攝影棚';
 
@@ -51,6 +53,7 @@ const patterns = Object.keys(import.meta.glob('/public/patterns/*.png')).map(
       document.addEventListener('astro:after-swap', pickPattern);
     </script>
     <title>{fullTitle}</title>
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImageUrl} />

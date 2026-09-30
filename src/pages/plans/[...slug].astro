@@ -18,7 +18,7 @@ const { plan } = Astro.props;
 const type = planTypes[plan.type];
 ---
 
-<Layout title={`和服方案│${plan.title}`} eyebrow="Kimono">
+<Layout title={`和服方案│${plan.title}`} eyebrow="Kimono" noindex>
   <PlanTabs slot="subheader" />
   <div class="numeral mb-8 text-xs uppercase tracking-[0.2em] text-cream/50" slot="subtitle">
     方案 {planTypeLabel(plan.type)}
