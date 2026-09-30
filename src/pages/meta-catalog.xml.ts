@@ -64,6 +64,8 @@ export const GET: APIRoute = async ({ site }) => {
         tag("g:price", `${type.was} ${CURRENCY}`),
         tag("g:sale_price", `${type.price} ${CURRENCY}`),
         tag("g:product_type", planTypeLabel(plan.type)),
+        // 自訂標籤 0：方案類別，供建立商品組合／篩選廣告
+        tag("g:custom_label_0", planTypeLabel(plan.type)),
         "</item>",
       ].join("\n");
     }),
