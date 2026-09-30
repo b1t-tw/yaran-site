@@ -1,11 +1,11 @@
 ---
-import { plans } from "../data/plans";
+import { plans, planTypeLabel, type PlanTypeKey } from "../data/plans";
 
 const currentPath = Astro.url.pathname.replace(/\/$/, "");
 const currentPlan = plans.find((p) => `/plans/${p.slug}` === currentPath);
 
 // 依 type 分組，組別與組內順序都沿用 plans.ts 的排列
-const groups = plans.reduce<{ type: string; items: typeof plans }[]>((acc, plan) => {
+const groups = plans.reduce<{ type: PlanTypeKey; items: typeof plans }[]>((acc, plan) => {
   const group = acc.find((g) => g.type === plan.type);
   if (group) group.items.push(plan);
   else acc.push({ type: plan.type, items: [plan] });
@@ -26,7 +26,7 @@ const activeGroup = groups.find((g) => g.type === currentPlan?.type) ?? groups[0
             <a
               href={`/plans/${group.items[0].slug}`}
               class:list={["tab-type", group === activeGroup && "is-active"]}>
-              {group.type}
+              {planTypeLabel(group.type)}
             </a>
           </li>
         ))

@@ -1,7 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { Image } from "astro:assets";
-import { plans } from "../../data/plans";
+import { plans, planTypes, planTypeLabel, planIncludes } from "../../data/plans";
 import { loadImages } from "../../lib/gallery";
 import { Icon } from "astro-icon/components";
 import BookingCta from "../../components/BookingCta.astro";
@@ -16,33 +16,12 @@ const partners = [
 ];
 
 // 價目
-const priceCards = [
-  { key: "A", title: "滿版小紋和服", price: "6,999", was: "7,950" },
-  { key: "B", title: "精緻訪問着", price: "7,500", was: "8,600" },
-  { key: "C", title: "和洋折衷", price: "6,888", was: "7,600" },
-  { key: "D", title: "浴衣", price: "6,888", was: "7,600" },
-];
-
-const includes = [
-  {
-    icon: "mdi:scissors",
-    label: "Styling",
-    title: "精緻造型",
-    desc: "包含「完整妝髮設計」與「專業和服着付」，含免費租借和服及配件。",
-  },
-  {
-    icon: "mdi:camera",
-    label: "Photography",
-    title: "專業攝影",
-    desc: "提供 6 張精修照片（可依需求加價增修）並全數贈送所有調色毛片。",
-  },
-  {
-    icon: "mdi:gift",
-    label: "Keepsake",
-    title: "專屬紀念",
-    desc: "贈送一張實體照片，或可選擇體驗獨特的現場藍晒製作，帶走充滿手作溫度的顯影回憶。",
-  },
-];
+const priceCards = Object.entries(planTypes).map(([key, t]) => ({
+  key,
+  title: t.title,
+  price: t.price.toLocaleString("en-US"),
+  was: t.was.toLocaleString("en-US"),
+}));
 
 // 和服預約流程，依序顯示
 const bookingSteps = [
@@ -135,7 +114,7 @@ const covers_b = await Promise.all(plans.map((plan) => loadImages(`plans/${plan.
         <div class="shell reveal">
           <div class="core grid gap-10 px-5 py-10 md:grid-cols-3 md:gap-12 md:px-10 md:py-12">
             {
-              includes.map((item) => (
+              planIncludes.map((item) => (
                 <div>
                   <span class="include-mark">
                     <Icon name={item.icon} class="text-lg" />
@@ -233,7 +212,7 @@ const covers_b = await Promise.all(plans.map((plan) => loadImages(`plans/${plan.
                         )}
                       </>
                     )}
-                    <span class="plan-type numeral">{plan.type}</span>
+                    <span class="plan-type numeral">{planTypeLabel(plan.type)}</span>
                   </div>
                   <h4 class="plan-title mt-4 text-center">{plan.title}</h4>
                 </a>

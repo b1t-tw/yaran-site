@@ -5,7 +5,7 @@ import PhotoGallery from "../../components/PhotoGallery.astro";
 import BookingCta from "../../components/BookingCta.astro";
 import StickyBookingBar from "../../components/StickyBookingBar.astro";
 import { kimonoBooking } from "../../lib/booking";
-import { plans } from "../../data/plans";
+import { plans, planTypes, planTypeLabel } from "../../data/plans";
 
 export function getStaticPaths() {
   return plans.map((plan) => ({
@@ -15,17 +15,38 @@ export function getStaticPaths() {
 }
 
 const { plan } = Astro.props;
+const type = planTypes[plan.type];
 ---
 
 <Layout title={`和服方案│${plan.title}`} eyebrow="Kimono">
   <PlanTabs slot="subheader" />
   <div class="numeral mb-8 text-xs uppercase tracking-[0.2em] text-cream/50" slot="subtitle">
-    方案 {plan.type}
+    方案 {planTypeLabel(plan.type)}
   </div>
 
   <main class="section-tight">
     <div class="site-container">
       <section class="reveal">
+        <span class="eyebrow">Price</span>
+        <h2 class="mt-6 mb-8">方案價格</h2>
+        <div class="shell">
+          <div class="core px-5 py-7 md:px-10">
+            <div class="flex items-baseline gap-3">
+              <span class="numeral text-3xl font-light text-primary-light/45">{plan.type}</span>
+              <h3 class="mb-0 text-amber-100">{type.title}</h3>
+            </div>
+            <div class="mt-8 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <span class="numeral text-[10px] uppercase tracking-[0.22em] text-cream/45">體驗價</span>
+              <span class="text-4xl font-light tracking-tight text-accent md:text-5xl">
+                ${type.price.toLocaleString("en-US")}
+              </span>
+              <del class="text-sm whitespace-nowrap text-cream/35">原價 ${type.was.toLocaleString("en-US")}</del>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="reveal mt-20">
         <span class="eyebrow">Sizing</span>
         <h2 class="mt-6 mb-8">尺寸</h2>
         <div class="shell">
