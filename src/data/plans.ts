@@ -163,3 +163,6 @@ export const plans: Plan[] = [
 ];
 
 export const getPlan = (slug: string) => plans.find((p) => p.slug === slug);
+
+/** Meta 商品目錄的商品 ID（g:id）；Pixel ViewContent 的 content_ids 必須與此一致 */
+export const catalogId = (plan: Plan) => plan.slug.replaceAll("/", "-");

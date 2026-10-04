@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { getImage } from "astro:assets";
-import { plans, planTypes, planTypeLabel, planIncludes } from "../data/plans";
+import { plans, planTypes, planTypeLabel, planIncludes, catalogId } from "../data/plans";
 import { loadImages } from "../lib/gallery";
 
 // Meta 商品目錄資料摘要（RSS XML）。build 時由 plans.ts 產生，部署後在
@@ -52,7 +52,7 @@ export const GET: APIRoute = async ({ site }) => {
 
       return [
         "<item>",
-        tag("g:id", plan.slug.replaceAll("/", "-")),
+        tag("g:id", catalogId(plan)),
         tag("g:title", `${type.title}｜${plan.title}`),
         tag("g:description", description),
         tag("g:link", abs(`/plans/${plan.slug}/`)),

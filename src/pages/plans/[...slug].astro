@@ -5,7 +5,7 @@ import PhotoGallery from "../../components/PhotoGallery.astro";
 import BookingCta from "../../components/BookingCta.astro";
 import StickyBookingBar from "../../components/StickyBookingBar.astro";
 import { kimonoBooking } from "../../lib/booking";
-import { plans, planTypes, planTypeLabel } from "../../data/plans";
+import { plans, planTypes, planTypeLabel, catalogId } from "../../data/plans";
 
 export function getStaticPaths() {
   return plans.map((plan) => ({
@@ -16,9 +16,19 @@ export function getStaticPaths() {
 
 const { plan } = Astro.props;
 const type = planTypes[plan.type];
+
+// content_ids／content_name 與 /meta-catalog.xml 的 g:id／g:title 一致，目錄廣告才配得到商品
+const viewContent = {
+  content_ids: [catalogId(plan)],
+  content_type: "product",
+  content_name: `${type.title}｜${plan.title}`,
+  content_category: planTypeLabel(plan.type),
+  value: type.price,
+  currency: "TWD",
+};
 ---
 
-<Layout title={`和服方案│${plan.title}`} eyebrow="Kimono" noindex>
+<Layout title={`和服方案│${plan.title}`} eyebrow="Kimono" noindex viewContent={viewContent}>
   <PlanTabs slot="subheader" />
   <div class="numeral mb-8 text-xs uppercase tracking-[0.2em] text-cream/50" slot="subtitle">
     方案 {planTypeLabel(plan.type)}

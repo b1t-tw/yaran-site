@@ -3,6 +3,7 @@ import '../styles/main.css';
 import { getImage } from 'astro:assets';
 import { ClientRouter } from 'astro:transitions';
 import Footer from '../components/Footer.astro';
+import { kimonoBooking } from '../lib/booking';
 import Header from '../components/Header.astro';
 import hero1 from '../assets/images/20260515_野蘭空間照_CXL_2164.jpg';
 
@@ -12,9 +13,11 @@ interface Props {
   eyebrow?: string;
   /* 不讓搜尋引擎收錄（仍會跟隨連結）；同時要在 astro.config 的 sitemap filter 排除 */
   noindex?: boolean;
+  /* Meta Pixel ViewContent 參數；有給才送（目前只有方案頁，content_ids 需對應商品目錄 g:id） */
+  viewContent?: Record<string, unknown>;
 }
 
-const { title, eyebrow = "Yaran Studio", noindex = false } = Astro.props;
+const { title, eyebrow = "Yaran Studio", noindex = false, viewContent } = Astro.props;
 const fullTitle = `${title} - YARAN 野蘭攝影棚`;
 const description = 'YARAN 野蘭攝影棚';
 
@@ -91,20 +94,54 @@ const patterns = Object.keys(import.meta.glob('/public/patterns/*.png')).map(
       t.src=v;s=b.getElementsByTagName(e)[0];
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
+      // SPA 換頁的 PageView 由下方 astro:after-swap 手動送；關掉 Pixel 依 history.pushState 自動送的 PageView，避免重複
+      fbq.disablePushState = true;
       fbq('init', '2839746599700251');
       fbq('track', 'PageView');
     </script>
-    <!-- Track frametime.app clicks as InitiateCheckout -->
-    <script is:inline>
-      document.addEventListener('click', function (e) {
-        var a = e.target.closest('a[href*="frametime.app"]');
-        if (!a) return;
+    <!-- Track booking CTA clicks as InitiateCheckout: frametime.app（租棚）與和服預約表單 -->
+    <script define:vars={{ kimonoBookingHref: kimonoBooking.href }}>
+      // 站內 SPA 換頁後網址的 UTM 會消失：首次進站時存進 sessionStorage，外連 handoff 時再取用
+      var UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign'];
+      function readUtm(params) {
+        var utm = {};
+        UTM_KEYS.forEach(function (key) {
+          var value = params.get(key);
+          if (value) utm[key] = value;
+        });
+        return Object.keys(utm).length ? utm : null;
+      }
+      try {
+        var landingUtm = readUtm(new URLSearchParams(window.location.search));
+        if (landingUtm) sessionStorage.setItem('yaran_landing_utm', JSON.stringify(landingUtm));
+      } catch (err) {}
 
-        // Read the original ad attribution from the current page URL
-        var pageParams = new URLSearchParams(window.location.search);
-        var src = pageParams.get('utm_source');
-        var medium = pageParams.get('utm_medium');
-        var campaign = pageParams.get('utm_campaign');
+      // 和服預約表單：方案頁帶與 ViewContent 相同的商品參數（#fb-view-content），總覽頁沒有單一商品就不帶
+      function trackKimonoCheckout() {
+        var params;
+        try {
+          var el = document.getElementById('fb-view-content');
+          if (el) params = JSON.parse(el.textContent);
+        } catch (err) {}
+        if (window.fbq) fbq('track', 'InitiateCheckout', params);
+      }
+
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest('a[href]');
+        if (!a) return;
+        var href = a.getAttribute('href');
+        if (href === kimonoBookingHref) return trackKimonoCheckout();
+        if (href.indexOf('frametime.app') === -1) return;
+
+        // Original ad attribution: current page URL first, else the UTM saved on landing
+        var utm = readUtm(new URLSearchParams(window.location.search));
+        if (!utm) {
+          try { utm = JSON.parse(sessionStorage.getItem('yaran_landing_utm')); } catch (err) {}
+        }
+        utm = utm || {};
+        var src = utm.utm_source;
+        var medium = utm.utm_medium;
+        var campaign = utm.utm_campaign;
 
         // Frametime is our referrer: identify our site as the source, keep the
         // campaign, and preserve the original ad attribution under namespaced keys.
@@ -143,6 +180,11 @@ const patterns = Object.keys(import.meta.glob('/public/patterns/*.png')).map(
         }
         if (window.fbq) fbq('track', 'PageView');
       });
+      // ViewContent：astro:page-load 首次載入與每次 SPA 換頁都會觸發，參數由頁面放在 #fb-view-content
+      document.addEventListener('astro:page-load', function () {
+        var el = document.getElementById('fb-view-content');
+        if (el && window.fbq) fbq('track', 'ViewContent', JSON.parse(el.textContent));
+      });
     </script>
     <ClientRouter />
   </head>
@@ -151,6 +193,14 @@ const patterns = Object.keys(import.meta.glob('/public/patterns/*.png')).map(
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5CPDV3HJ"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
+    {viewContent && (
+      <script
+        is:inline
+        type="application/json"
+        id="fb-view-content"
+        set:html={JSON.stringify(viewContent).replace(/</g, '\\u003c')}
+      />
+    )}
     {
       title !== '首頁' && (
         <>
