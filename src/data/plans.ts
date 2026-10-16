@@ -20,7 +20,7 @@ export const planIncludes = [
     icon: "mdi:scissors",
     label: "Styling",
     title: "精緻造型",
-    desc: "包含「完整妝髮設計」與「專業和服着付」，含免費租借和服及配件。",
+    desc: "包含「完整妝髮設計」與「專業和服着付」，費用已含和服及配件租借。",
   },
   {
     icon: "mdi:camera",
@@ -166,3 +166,7 @@ export const getPlan = (slug: string) => plans.find((p) => p.slug === slug);
 
 /** Meta 商品目錄的商品 ID（g:id）；Pixel ViewContent 的 content_ids 必須與此一致 */
 export const catalogId = (plan: Plan) => plan.slug.replaceAll("/", "-");
+
+/** Meta 商品目錄的商品名稱（g:title）；Pixel ViewContent 的 content_name 與此一致。
+ *  開頭標明「和服寫真」：商品是拍攝方案（含租借），不是販售和服本身 */
+export const catalogTitle = (plan: Plan) => `和服寫真｜${planTypes[plan.type].title}・${plan.title}`;

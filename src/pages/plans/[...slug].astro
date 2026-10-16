@@ -5,7 +5,7 @@ import PhotoGallery from "../../components/PhotoGallery.astro";
 import BookingCta from "../../components/BookingCta.astro";
 import StickyBookingBar from "../../components/StickyBookingBar.astro";
 import { kimonoBooking } from "../../lib/booking";
-import { plans, planTypes, planTypeLabel, catalogId } from "../../data/plans";
+import { plans, planTypes, planTypeLabel, catalogId, catalogTitle } from "../../data/plans";
 
 export function getStaticPaths() {
   return plans.map((plan) => ({
@@ -21,7 +21,7 @@ const type = planTypes[plan.type];
 const viewContent = {
   content_ids: [catalogId(plan)],
   content_type: "product",
-  content_name: `${type.title}｜${plan.title}`,
+  content_name: catalogTitle(plan),
   content_category: planTypeLabel(plan.type),
   value: type.price,
   currency: "TWD",
@@ -48,9 +48,9 @@ const viewContent = {
             <div class="mt-8 flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <span class="numeral text-[10px] uppercase tracking-[0.22em] text-cream/45">體驗價</span>
               <span class="text-4xl font-light tracking-tight text-accent md:text-5xl">
-                ${type.price.toLocaleString("en-US")}
+                NT${type.price.toLocaleString("en-US")}
               </span>
-              <del class="text-sm whitespace-nowrap text-cream/35">原價 ${type.was.toLocaleString("en-US")}</del>
+              <del class="text-sm whitespace-nowrap text-cream/35">原價 NT${type.was.toLocaleString("en-US")}</del>
             </div>
           </div>
         </div>

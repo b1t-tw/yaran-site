@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { getImage } from "astro:assets";
-import { plans, planTypes, planTypeLabel, planIncludes, catalogId } from "../data/plans";
+import { plans, planTypes, planTypeLabel, planIncludes, catalogId, catalogTitle } from "../data/plans";
 import { loadImages } from "../lib/gallery";
 
 // Meta 商品目錄資料摘要（RSS XML）。build 時由 plans.ts 產生，部署後在
@@ -41,9 +41,11 @@ export const GET: APIRoute = async ({ site }) => {
         extraImages.push(url);
       }
 
+      // 只送實際售價：不送 g:sale_price，Meta 才不會在廣告上掛「原價→特價」的折扣標籤
       const description = [
+        "和服寫真拍攝方案（含和服租借、妝髮、着付與攝影），非和服販售。",
         `${planTypeLabel(plan.type)}｜${plan.title}`,
-        `體驗價 NT$${type.price.toLocaleString("en-US")}（原價 NT$${type.was.toLocaleString("en-US")}）`,
+        `方案價格 NT$${type.price.toLocaleString("en-US")}`,
         plan.intro && `尺寸\n${plan.intro}`,
         `方案內容\n${planIncludes.map((i) => `・${i.title}：${i.desc}`).join("\n")}`,
       ]
@@ -53,7 +55,7 @@ export const GET: APIRoute = async ({ site }) => {
       return [
         "<item>",
         tag("g:id", catalogId(plan)),
-        tag("g:title", `${type.title}｜${plan.title}`),
+        tag("g:title", catalogTitle(plan)),
         tag("g:description", description),
         tag("g:link", abs(`/plans/${plan.slug}/`)),
         tag("g:image_link", mainImage),
@@ -61,8 +63,7 @@ export const GET: APIRoute = async ({ site }) => {
         tag("g:brand", BRAND),
         tag("g:condition", "new"),
         tag("g:availability", "in stock"),
-        tag("g:price", `${type.was} ${CURRENCY}`),
-        tag("g:sale_price", `${type.price} ${CURRENCY}`),
+        tag("g:price", `${type.price} ${CURRENCY}`),
         tag("g:product_type", planTypeLabel(plan.type)),
         // 自訂標籤 0：方案類別，供建立商品組合／篩選廣告
         tag("g:custom_label_0", planTypeLabel(plan.type)),

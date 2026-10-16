@@ -99,8 +99,8 @@ const covers_b = await Promise.all(plans.map((plan) => loadImages(`plans/${plan.
                   </div>
                   <div class="mt-8 flex flex-wrap items-baseline gap-x-3 gap-y-1">
                     <span class="numeral text-[10px] uppercase tracking-[0.22em] text-cream/45">體驗價</span>
-                    <span class="text-4xl font-light tracking-tight text-accent md:text-5xl">${card.price}</span>
-                    <del class="text-sm whitespace-nowrap text-cream/35">原價 ${card.was}</del>
+                    <span class="text-4xl font-light tracking-tight text-accent md:text-5xl">NT${card.price}</span>
+                    <del class="text-sm whitespace-nowrap text-cream/35">原價 NT${card.was}</del>
                   </div>
                 </div>
               </div>
